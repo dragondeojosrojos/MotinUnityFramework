@@ -1,0 +1,1 @@
+﻿#define	USE_TK2D_EXTENSIONS

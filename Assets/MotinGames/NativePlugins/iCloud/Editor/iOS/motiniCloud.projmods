@@ -1,0 +1,13 @@
+{
+  "group": "iCloud",
+  "patches": [],
+  "libs": [],
+  "librarysearchpaths": [],
+  "frameworks": [],
+  "headerpaths": [
+    "Source/"
+  ],
+  "files": [],
+  "folders": ["Source"],	
+  "excludes": ["^.*\\.meta$", "^.*\\.mdown^", "^.*\\.pdf$", "^.*\\.projmods$", ".DS_Store"]
+}

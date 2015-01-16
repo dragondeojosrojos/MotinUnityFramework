@@ -1,0 +1,22 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+.DS_Store
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Eclipse project files
+#.classpath
+#.project
+# We need the above files to make the import of projects work

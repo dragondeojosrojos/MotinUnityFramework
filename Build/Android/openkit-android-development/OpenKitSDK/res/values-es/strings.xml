@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+
+	Copyright 2012 OpenKit
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+ -->
+ 
+<resources>
+
+    <string name="io_openkit_sdk_app_name">OpenKitSDK</string>
+    
+    <string name="io_openkit_login_text_include">Incluye amigos de</string>
+    <string name="io_openkit_login_text">Inicia sesion para jugar con amigos.</string>
+    <string name="io_openkit_login_subtext">Puntajes, Achievements, y mucho más!</string>
+    <string name="io_openkit_google_signin">Inicia sesion con Google</string>
+    <string name="io_openkit_facebook_signin">Inicia sesion con Facebook</string>
+    <string name="io_openkit_fb_signin">Inicia sesion con Facebook</string>
+    <string name="io_openkit_fb">Facebook</string>
+    <string name="io_openkit_twitter_signin">Sign in with Twitter</string>
+	<string name="io_openkit_guest_signin">Cuenta Invitado</string>
+	<string name="io_openkit_dont_sign_in">No gracias</string>
+    
+	<string name="io_openkit_loggedIn">Sesion de</string>
+	<string name="io_openkit_createNickName">Crea un alias para esta cuenta</string>
+    <string name="io_openkit_nickExplanation">Asi es como apareceras en la tabla de puntajes</string>
+	<string name="io_openkit_continue">Continua</string>
+	
+	<string name="io_openkit_fbprompt_title">Más amigos, más diversión! </string>
+	<string name="io_openkit_fbprompt_subtext">La tabla de puntajes mas mas divertida cuando juegas con amigos </string>
+	<string name="io_openkit_fbprompt_include_friends">Invita amigos de facebook</string>
+	
+	<string name="io_openkit_inviteFriends">Invita amigos</string>
+	
+    
+    <string name="io_openkit_title_leaderboards">Puntajes</string>
+    <string name="io_openkit_title_achievements">Achievements</string>
+    <string name="io_openkit_leaderboards_alltime">MEJORES</string>
+    <string name="io_openkit_leaderboards_thisWeek">DE ESTA SEMANA</string>
+    <string name="io_openkit_leaderboards_today">DE HOY</string>
+    <string name="io_openkit_profile">Ajustes</string>
+    <string name="io_openkit_logout">Cerrar sesion</string>
+    <string name="io_openkit_userprofle">Ajustes</string>
+    <string name="io_openkit_changeNick">Cambiar alias</string>
+    
+    <string name="io_openkit_googlePlayServicesError">Unfortunately, your device does not have or does not support the required version of Google Play. Please try logging with a different type of account.</string>
+    <string name="io_openkit_googleLoginError">Sorry, but there was an error logging in with Google. Please try again later or try a different account type.</string>
+    <string name="io_openkit_googleNoAccts">You don\'t have any Google accounts stored on your device. Go to your device settings, and choose "Accounts" and add a Google account.</string>
+    <string name="io_openkit_OKLoginError">Sorry, but there was an error reaching the OpenKit servers. Please try again later or try using a different account type.</string>
+    
+    <string name="io_openkit_showMoreScores">Mostrar más puntajes</string>
+    
+    <!-- Copy string resources from Facebook SDK -->
+    
+    <!-- End Facebook SDK strings -->
+
+</resources>

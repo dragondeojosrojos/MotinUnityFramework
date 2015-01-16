@@ -1,0 +1,1 @@
+Requires python2.7 + pyexcelarator

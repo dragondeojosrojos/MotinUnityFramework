@@ -1,0 +1,16 @@
+{
+  "group": "Social",
+  "patches": [],
+  "libs": [],
+  "librarysearchpaths": [],
+  "frameworks": [
+  	"Accounts.framework:weak",
+  	"Twitter.framework:weak",
+  ],
+  "headerpaths": [
+    "Source/"
+  ],
+  "files": [],
+  "folders": ["Source"],	
+  "excludes": ["^.*\\.meta$", "^.*\\.mdown^", "^.*\\.pdf$", "^.*\\.projmods$", ".DS_Store"]
+}

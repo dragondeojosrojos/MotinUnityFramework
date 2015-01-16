@@ -1,0 +1,1326 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+SceneSettings:
+  m_ObjectHideFlags: 0
+  m_PVSData: 
+  m_PVSObjectsArray: []
+  m_PVSPortalsArray: []
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: .25
+    backfaceThreshold: 100
+--- !u!104 &2
+RenderSettings:
+  m_Fog: 0
+  m_FogColor: {r: .5, g: .5, b: .5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: .00999999978
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientLight: {r: .200000003, g: .200000003, b: .200000003, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
+  m_HaloStrength: .5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 0}
+  m_ObjectHideFlags: 0
+--- !u!127 &3
+LevelGameManager:
+  m_ObjectHideFlags: 0
+--- !u!157 &4
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  m_LightProbes: {fileID: 0}
+  m_Lightmaps: []
+  m_LightmapsMode: 1
+  m_BakedColorSpace: 0
+  m_UseDualLightmapsInForward: 0
+  m_LightmapEditorSettings:
+    m_Resolution: 50
+    m_LastUsedResolution: 0
+    m_TextureWidth: 1024
+    m_TextureHeight: 1024
+    m_BounceBoost: 1
+    m_BounceIntensity: 1
+    m_SkyLightColor: {r: .860000014, g: .930000007, b: 1, a: 1}
+    m_SkyLightIntensity: 0
+    m_Quality: 0
+    m_Bounces: 1
+    m_FinalGatherRays: 1000
+    m_FinalGatherContrastThreshold: .0500000007
+    m_FinalGatherGradientThreshold: 0
+    m_FinalGatherInterpolationPoints: 15
+    m_AOAmount: 0
+    m_AOMaxDistance: .100000001
+    m_AOContrast: 1
+    m_LODSurfaceMappingDistance: 1
+    m_Padding: 0
+    m_TextureCompression: 0
+    m_LockAtlas: 0
+--- !u!196 &5
+NavMeshSettings:
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    agentRadius: .5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: .400000006
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    accuratePlacement: 0
+    minRegionArea: 2
+    widthInaccuracy: 16.666666
+    heightInaccuracy: 10
+  m_NavMesh: {fileID: 0}
+--- !u!114 &101758545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87eba037da51247f0810de7f05816672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startFrame: 30
+  easeType: 21
+  customEase: []
+  valueType: 5
+  component: {fileID: 2141658751}
+  endFrame: -1
+  propertyName: localScale
+  fieldName: 
+  methodName: 
+  methodParameterTypes: []
+  start_val: 0
+  start_vect2: {x: 0, y: 0}
+  start_vect3: {x: 1, y: 1, z: 1}
+  start_color: {r: 0, g: 0, b: 0, a: 0}
+  start_rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  end_val: 0
+  end_vect2: {x: 0, y: 0}
+  end_vect3: {x: 0, y: 0, z: 0}
+  end_color: {r: 0, g: 0, b: 0, a: 0}
+  end_rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  start_morph: []
+  end_morph: []
+--- !u!1 &190881605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 190881607}
+  - 23: {fileID: 190881610}
+  - 102: {fileID: 190881609}
+  - 114: {fileID: 190881608}
+  - 114: {fileID: 190881606}
+  m_Layer: 0
+  m_Name: Label_StringManagerTest
+  m_TagString: StringManagerLabel
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &190881606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190881605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b2db3bea0a143678ba3f35be9be6bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  motinLabel: {fileID: 190881608}
+  motinStringName: MENU_FACEBOOK_LOGIN
+  labelName: motinLabel
+  forceUpperCase: 0
+--- !u!4 &190881607
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190881605}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.30021, y: 3.64471054, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+--- !u!114 &190881608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190881605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f62eb68856104d44bd1758f06b69e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxChars: 42
+--- !u!102 &190881609
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190881605}
+  m_Text: Facebook login
+  m_OffsetZ: 0
+  m_CharacterSize: 1
+  m_LineSpacing: 1
+  m_Anchor: 0
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 0
+  m_FontStyle: 0
+  m_RichText: 1
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+--- !u!23 &190881610
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 190881605}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!1 &202854494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 202854495}
+  m_Layer: 0
+  m_Name: Prefabs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &202854495
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 202854494}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2141658751}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+--- !u!114 &225547874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06c5943ec0804339a667d45b578a755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frame: 15
+  easeType: 27
+  customEase: []
+  val: 0
+  vect2: {x: 0, y: 0}
+  vect3: {x: 2, y: 2, z: 2}
+  color: {r: 0, g: 0, b: 0, a: 0}
+  rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  morph: []
+--- !u!114 &248519639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06c5943ec0804339a667d45b578a755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frame: 30
+  easeType: 21
+  customEase: []
+  val: 0
+  vect2: {x: 0, y: 0}
+  vect3: {x: 1, y: 1, z: 1}
+  color: {r: 0, g: 0, b: 0, a: 0}
+  rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  morph: []
+--- !u!114 &321207416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 095f430a025b648938874e1b87b81d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 1
+  name: Track1
+  keys:
+  - {fileID: 1147343671}
+  - {fileID: 225547874}
+  - {fileID: 248519639}
+  cache:
+  - {fileID: 875313110}
+  - {fileID: 2124869556}
+  - {fileID: 101758545}
+  foldout: 1
+  parentTake: {fileID: 1693681568}
+  valueType: 5
+  obj: {fileID: 2141658747}
+  component: {fileID: 2141658751}
+  propertyName: localScale
+  fieldName: 
+  methodName: 
+  methodParameterTypes: []
+--- !u!114 &649957297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e40d258de014659bcb1960ba4b6f3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  group_name: Group0
+  group_id: 0
+  elements: 01000000
+  foldout: 1
+--- !u!1 &821574723
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 821574724}
+  - 114: {fileID: 821574725}
+  m_Layer: 0
+  m_Name: MotinInputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &821574724
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 821574723}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1871154435}
+  m_RootOrder: 2
+--- !u!114 &821574725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 821574723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1165352f67ede439da0cb6455282939a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragTolerance: 1
+--- !u!114 &875313110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87eba037da51247f0810de7f05816672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startFrame: 1
+  easeType: 24
+  customEase: []
+  valueType: 5
+  component: {fileID: 2141658751}
+  endFrame: 15
+  propertyName: localScale
+  fieldName: 
+  methodName: 
+  methodParameterTypes: []
+  start_val: 0
+  start_vect2: {x: 0, y: 0}
+  start_vect3: {x: 1, y: 1, z: 1}
+  start_color: {r: 0, g: 0, b: 0, a: 0}
+  start_rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  end_val: 0
+  end_vect2: {x: 0, y: 0}
+  end_vect3: {x: 2, y: 2, z: 2}
+  end_color: {r: 0, g: 0, b: 0, a: 0}
+  end_rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  start_morph: []
+  end_morph: []
+--- !u!114 &1147343671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06c5943ec0804339a667d45b578a755, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frame: 1
+  easeType: 24
+  customEase: []
+  val: 0
+  vect2: {x: 0, y: 0}
+  vect3: {x: 1, y: 1, z: 1}
+  color: {r: 0, g: 0, b: 0, a: 0}
+  rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  morph: []
+--- !u!1 &1242888386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1242888387}
+  - 114: {fileID: 1242888388}
+  m_Layer: 0
+  m_Name: MotinDemoController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1242888387
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1242888386}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+--- !u!114 &1242888388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1242888386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f3adcbcc98843cca8b568c6a2b6c78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1263034129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1263034130}
+  - 114: {fileID: 1263034131}
+  m_Layer: 0
+  m_Name: MotinSoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1263034130
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1263034129}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.60147285, y: -6.33457184, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1871154435}
+  m_RootOrder: 3
+--- !u!114 &1263034131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1263034129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e28fd9a4ecc4b8796358b12c59c130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDebug: 0
+  soundProps:
+  - name: FX_COMBO_GREAT
+    SoundId: FX_COMBO_GREAT
+    volumen: 1
+  downloadSounds: 0
+  defaultAudioSources: 10
+--- !u!1 &1673812163
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1673812164}
+  - 114: {fileID: 1673812165}
+  m_Layer: 0
+  m_Name: MotinPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1673812164
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1673812163}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1871154435}
+  m_RootOrder: 0
+--- !u!114 &1673812165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1673812163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849ad62e759ac4f4f961cc5e1fef252b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolDatas:
+  - name: Cube
+    prefab: {fileID: 2141658747}
+    defaultPoolCount: 10
+    defaultStoragePosition: {x: 10000, y: 10000, z: 0}
+    keepActive: 0
+    spawnBehaviour: 0
+  createPoolsOnStart: 1
+--- !u!114 &1693681568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 508b65899aba84fb08d452713869c0c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: ScaleBounce
+  frameRate: 24
+  numFrames: 30
+  startFrame: -7
+  endFrame: 30
+  playbackSpeedIndex: 2
+  selectedTrack: 1
+  selectedFrame: 0
+  selectedGroup: 0
+  trackKeys: 01000000
+  trackValues:
+  - {fileID: 321207416}
+  contextSelection: 
+  ghostSelection: 
+  contextSelectionTracks: 01000000
+  track_count: 0
+  group_count: 0
+  rootGroup: {fileID: 649957297}
+  groupKeys: 
+  groupValues: []
+  cameraSwitcher: {fileID: 0}
+--- !u!1 &1717216331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1717216333}
+  - 108: {fileID: 1717216332}
+  m_Layer: 0
+  m_Name: Directional light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1717216332
+Light:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1717216331}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Type: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: .5
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_Strength: 1
+    m_Bias: .0500000007
+    m_Softness: 4
+    m_SoftnessFade: 1
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_ActuallyLightmapped: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 1
+  m_ShadowSamples: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_IndirectIntensity: 1
+  m_AreaSize: {x: 1, y: 1}
+--- !u!4 &1717216333
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1717216331}
+  m_LocalRotation: {x: .408217937, y: -.234569728, z: .109381676, w: .875426054}
+  m_LocalPosition: {x: 7.60147285, y: -6.33457184, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+--- !u!1 &1781677630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1781677631}
+  - 114: {fileID: 1781677632}
+  m_Layer: 0
+  m_Name: MotinStringManager
+  m_TagString: StringManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1781677631
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1781677630}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1871154435}
+  m_RootOrder: 1
+--- !u!114 &1781677632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1781677630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e460d20e47f417ba0720899a47c16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultLang: 0
+--- !u!1 &1871154434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1871154435}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1871154435
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1871154434}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1673812164}
+  - {fileID: 1781677631}
+  - {fileID: 821574724}
+  - {fileID: 1263034130}
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+--- !u!1 &2035253899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2035253904}
+  - 20: {fileID: 2035253903}
+  - 92: {fileID: 2035253902}
+  - 124: {fileID: 2035253901}
+  - 81: {fileID: 2035253900}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &2035253900
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035253899}
+  m_Enabled: 1
+--- !u!124 &2035253901
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035253899}
+  m_Enabled: 1
+--- !u!92 &2035253902
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035253899}
+  m_Enabled: 1
+--- !u!20 &2035253903
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035253899}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: .544117689, g: 0, b: 0, a: .0196078438}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: .300000012
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
+--- !u!4 &2035253904
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2035253899}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &2124869556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87eba037da51247f0810de7f05816672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startFrame: 15
+  easeType: 27
+  customEase: []
+  valueType: 5
+  component: {fileID: 2141658751}
+  endFrame: 30
+  propertyName: localScale
+  fieldName: 
+  methodName: 
+  methodParameterTypes: []
+  start_val: 0
+  start_vect2: {x: 0, y: 0}
+  start_vect3: {x: 2, y: 2, z: 2}
+  start_color: {r: 0, g: 0, b: 0, a: 0}
+  start_rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  end_val: 0
+  end_vect2: {x: 0, y: 0}
+  end_vect3: {x: 1, y: 1, z: 1}
+  end_color: {r: 0, g: 0, b: 0, a: 0}
+  end_rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  start_morph: []
+  end_morph: []
+--- !u!1 &2141658747
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2141658751}
+  - 33: {fileID: 2141658750}
+  - 65: {fileID: 2141658749}
+  - 23: {fileID: 2141658748}
+  - 114: {fileID: 2141658752}
+  m_Layer: 0
+  m_Name: MotinAnimatorDemo_Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!23 &2141658748
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2141658747}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!65 &2141658749
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2141658747}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &2141658750
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2141658747}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &2141658751
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2141658747}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.60147285, y: -6.33457184, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 202854495}
+  m_RootOrder: 0
+--- !u!114 &2141658752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2141658747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 587c610d3c49241ca8bcfca8b6a68078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataFile: {fileID: 0}
+  animatorData:
+    takes:
+    - name: ScaleBounce
+      frameRate: 24
+      numFrames: 30
+      startFrame: -7
+      endFrame: 30
+      playbackSpeedIndex: 2
+      trackValues:
+      - motinValues:
+        - name: id
+          val_bool: 0
+          valueType: 0
+          val_int: 1
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 0}
+          lsArray: []
+        - name: name
+          val_bool: 0
+          valueType: 9
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: Track1
+          val_obj: {fileID: 0}
+          lsArray: []
+        - name: trackType
+          val_bool: 0
+          valueType: 0
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 0}
+          lsArray: []
+        - name: valueType
+          val_bool: 0
+          valueType: 0
+          val_int: 5
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 0}
+          lsArray: []
+        - name: obj
+          val_bool: 0
+          valueType: 11
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 2141658747}
+          lsArray: []
+        - name: component
+          val_bool: 0
+          valueType: 11
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 2141658751}
+          lsArray: []
+        - name: propertyName
+          val_bool: 0
+          valueType: 9
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: localScale
+          val_obj: {fileID: 0}
+          lsArray: []
+        - name: fieldName
+          val_bool: 0
+          valueType: 9
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 0}
+          lsArray: []
+        - name: methodName
+          val_bool: 0
+          valueType: 9
+          val_int: 0
+          val_float: 0
+          val_double: 0
+          val_vect2: {x: 0, y: 0}
+          val_vect3: {x: 0, y: 0, z: 0}
+          val_vect4: {x: 0, y: 0, z: 0, w: 0}
+          val_color: {r: 0, g: 0, b: 0, a: 0}
+          val_rect:
+            serializedVersion: 2
+            x: 0
+            y: 0
+            width: 0
+            height: 0
+          val_string: 
+          val_obj: {fileID: 0}
+          lsArray: []
+        keys:
+        - motinValues:
+          - name: frame
+            val_bool: 0
+            valueType: 0
+            val_int: 1
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 0, y: 0, z: 0}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          - name: easeType
+            val_bool: 0
+            valueType: 0
+            val_int: 24
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 0, y: 0, z: 0}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          - name: value
+            val_bool: 0
+            valueType: 5
+            val_int: 0
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 1, y: 1, z: 1}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          customEase: []
+          morph: []
+        - motinValues:
+          - name: frame
+            val_bool: 0
+            valueType: 0
+            val_int: 15
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 0, y: 0, z: 0}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          - name: easeType
+            val_bool: 0
+            valueType: 0
+            val_int: 27
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 0, y: 0, z: 0}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          - name: value
+            val_bool: 0
+            valueType: 5
+            val_int: 0
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 2, y: 2, z: 2}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          customEase: []
+          morph: []
+        - motinValues:
+          - name: frame
+            val_bool: 0
+            valueType: 0
+            val_int: 30
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 0, y: 0, z: 0}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          - name: easeType
+            val_bool: 0
+            valueType: 0
+            val_int: 21
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 0, y: 0, z: 0}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          - name: value
+            val_bool: 0
+            valueType: 5
+            val_int: 0
+            val_float: 0
+            val_double: 0
+            val_vect2: {x: 0, y: 0}
+            val_vect3: {x: 1, y: 1, z: 1}
+            val_vect4: {x: 0, y: 0, z: 0, w: 0}
+            val_color: {r: 0, g: 0, b: 0, a: 0}
+            val_rect:
+              serializedVersion: 2
+              x: 0
+              y: 0
+              width: 0
+              height: 0
+            val_string: 
+            val_obj: {fileID: 0}
+            lsArray: []
+          customEase: []
+          morph: []
+        groupId: 0
+      groupValues: []
+    playOnStart: ScaleBounce
+  takes:
+  - {fileID: 1693681568}
+  playOnStart: {fileID: 1693681568}
+  currentTake: 0
+  elapsedTime: 0
