@@ -124,13 +124,13 @@ public class MotinSoundManagerEditor : MotinEditor {
 			textLines.Add ("	public enum Sounds");
 			textLines.Add ("	{");
 			
-			int i =0;
-			foreach(string define in defineNames)
+
+			for(int i = 0 ; i < defineNames.Count;i++)
 			{
 				textLines.Add("		" + defineNames[i] + "=" + i.ToString() + ",");
-				i++;
+				
 			}
-			textLines.Add("		COUNT=" + i.ToString());
+		textLines.Add("		COUNT=" + defineNames.Count.ToString());
 			textLines.Add ("	}");
 		}
 		void WritePaths()
@@ -138,11 +138,10 @@ public class MotinSoundManagerEditor : MotinEditor {
 			textLines.Add ("	public static readonly string[] SoundPaths = ");
 			textLines.Add ("	{");
 			
-			int i =0;
-			foreach(string define in defineNames)
+			for(int i = 0 ; i < defineNames.Count;i++)
 			{
 				textLines.Add("		\"" + fileNames[i] + "\",");
-				i++;
+				
 			}
 			textLines.Add ("	};");
 			
@@ -150,11 +149,11 @@ public class MotinSoundManagerEditor : MotinEditor {
 			textLines.Add ("	public static readonly string[] SoundExtensions = ");
 			textLines.Add ("	{");
 			
-			i =0;
-			foreach(string define in defineNames)
+			
+			for(int i = 0 ; i < defineNames.Count;i++)
 			{
 				textLines.Add("		\"" + extensionNames[i] + "\",");
-				i++;
+				
 			}
 			textLines.Add ("	};");
 		}

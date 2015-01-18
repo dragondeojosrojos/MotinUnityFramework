@@ -43,7 +43,9 @@ namespace MotinGames
 		public float 	editorHeight { get { return editorRect.height; } set { editorRect.height =value;/* Mathf.Max(value, minInspectorHeight);*/ } }
 		
 		public EditorWindow hostEditorWindow = null;
-		
+
+
+		protected Dictionary<string,string[]> popupNamesLookup = new Dictionary<string, string[]>();
 		bool	targetSetFirstTime =true;
 
 		[SerializeField]
@@ -54,6 +56,8 @@ namespace MotinGames
 			set{
 				if(value!=target_ || targetSetFirstTime)
 				{
+					popupNamesLookup.Clear();
+
 					targetSetFirstTime = false;
 					target_ = value;
 					targetUpdated();
@@ -448,8 +452,14 @@ namespace MotinGames
 		
 		protected string DrawMotinDataEnumField(System.Reflection.FieldInfo field,string currentValue)
 		{
-			MotinEditorMotinDataEnumField motinDataAttr = (MotinEditorMotinDataEnumField)field.GetCustomAttributes(typeof(MotinEditorMotinDataEnumField),false)[0];
-			string[] dataNames = MotinDataManager.GetDataNames(motinDataAttr.filePath);
+			string[] dataNames  = GetPopupNames(field.Name);
+			if(dataNames==null)
+			{
+				MotinEditorMotinDataEnumField motinDataAttr = (MotinEditorMotinDataEnumField)field.GetCustomAttributes(typeof(MotinEditorMotinDataEnumField),false)[0];
+				dataNames = MotinDataManager.GetDataNames(motinDataAttr.filePath);
+				popupNamesLookup.Add(field.Name,dataNames);
+			}
+
 			int currentIndex = MotinUtils.StringArrayIndex(dataNames,currentValue);
 			if(currentIndex==-1)
 				currentIndex = dataNames.Length-1;
@@ -459,7 +469,14 @@ namespace MotinGames
 
 		protected string DrawEnumField(string fieldName,System.Type enumerationType,string currentValue)
 		{
-			string[] dataNames = System.Enum.GetNames(enumerationType);
+
+			string[] dataNames  = GetPopupNames(fieldName);
+			if(dataNames==null)
+			{
+				dataNames = System.Enum.GetNames(enumerationType);
+				popupNamesLookup.Add(fieldName,dataNames);
+			}
+
 			int currentIndex = MotinUtils.StringArrayIndex(dataNames,currentValue);
 			if(currentIndex==-1)
 				currentIndex = dataNames.Length-1;
@@ -495,6 +512,14 @@ namespace MotinGames
 		protected virtual void FieldValueChanged(object value,System.Reflection.FieldInfo field) 
 		{
 
+		}
+
+		string[] GetPopupNames(string key)
+		{
+			if(popupNamesLookup.ContainsKey(key))
+				return popupNamesLookup[key];
+
+			return null;
 		}
 	}
 }

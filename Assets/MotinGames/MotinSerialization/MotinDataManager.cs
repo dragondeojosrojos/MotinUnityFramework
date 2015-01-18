@@ -1141,7 +1141,7 @@ namespace MotinGames
 				return null;
 
 			List<MotinData> motinDataList = new List<MotinData>();
-			MotinData data = null;
+//			MotinData data = null;
 			foreach(XmlElement childElement in arrayElement.ChildNodes)
 			{
 				motinDataList.Add( Deserialize(childElement));

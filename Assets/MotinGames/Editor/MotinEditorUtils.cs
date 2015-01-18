@@ -135,7 +135,7 @@ public class MotinEditorUtils {
 	}
 */
 	
-	public static bool DrawList(string fieldName,IList list,bool foldout = true)
+	public static bool DrawList(string fieldName,IList list,bool foldout = true,System.Action<object> itemDrawCallback = null)
 	{
 		//bool changed = false;
 		foldout = EditorGUILayout.Foldout(foldout,fieldName);
@@ -147,7 +147,8 @@ public class MotinEditorUtils {
 					int count = EditorGUILayout.IntField("count:" ,list.Count);
 					if(GUILayout.Button("+"))
 					{
-						list.Add(list[list.Count-1]);
+						list.Add(System.Activator.CreateInstance(list.GetType().GetGenericArguments()[0]));
+						return foldout;
 					}
 				GUILayout.EndHorizontal();
 			if(count!=list.Count)
@@ -179,9 +180,32 @@ public class MotinEditorUtils {
 						list.RemoveAt(index);
 						return foldout;
 					}
+					if(GUILayout.Button("up"))
+					{
+						if(index>0)
+						{
+							object aux = list[index-1];
+						    list[index-1] =  list[index];
+						 	list[index] = aux;
+							return foldout;
+						}
+					}
+					if(GUILayout.Button("down"))
+					{
+						if(index< list.Count-1)
+						{
+							object aux = list[index+1];
+						    list[index+1] =  list[index];
+						 	list[index] = aux;
+							return foldout;
+						}
+					}
 				GUILayout.EndHorizontal();
 				
-				DrawClassInspector(data);
+				if(itemDrawCallback!=null)
+					itemDrawCallback(data);
+				else
+					DrawClassInspector(data);
 				
 				index++;
 			}

@@ -151,13 +151,15 @@
         [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view] addSubview:moviePlayer_.view];
         //[[[CCDirector sharedDirector] openGLView] addSubview:moviePlayer_.view];
     }
+    /* Obsolete
     else
     {
         // Use the old 2.0 style API
+        
         moviePlayer_.movieControlMode = MPMovieControlModeHidden;
         
     }
-	
+	*/
 	[moviePlayer_ play];
 	
     NSLog(@"Movie END PLAY ");

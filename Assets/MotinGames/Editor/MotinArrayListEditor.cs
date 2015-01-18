@@ -19,6 +19,7 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 	
 	
 	public bool orderDatas = true;
+	public bool overwriteFileOrder = false;
 	List<MotinData> motinDataList = new List<MotinData>();
 	protected override void objectListUpdated ()
 	{
@@ -30,9 +31,9 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 
 	}
 
-	protected override MotinEditor CreateInitializedEditor (System.Type dataType, object target)
+	protected override MotinEditor CreateInitializedEditor (System.Type dataType, object target, int index = -1)
 	{
-		MotinDataEditor newEditor = (MotinDataEditor) base.CreateInitializedEditor (dataType, target);
+		MotinDataEditor newEditor = (MotinDataEditor) base.CreateInitializedEditor (dataType, target,index);
 		newEditor.OnDataNameChanged += DataNameChanged;
 		return newEditor;
 	}
@@ -103,6 +104,12 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 				filteredObjects = (from data in motinDataList  orderby data.name select data).Cast<object>().ToList();
 			else
 				filteredObjects = (from data in motinDataList where  Contains(data.name, searchFilter) orderby data.name select data).Cast<object>().ToList();
+
+			if(overwriteFileOrder)
+			{
+				motinEditors_ = (from meditor in motinEditors_  orderby ((MotinData)meditor.target).name select meditor).ToList();
+				objectList_ = motinDataList.Cast<object>().ToList();
+			}
 		}
 		else
 		{
@@ -294,6 +301,7 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 	public void DataNameChanged(MotinEditor editor)
 	{
 		FilterList();
+		UpdateSelectedObjectIndex();
 		Repaint();
 	}
 }

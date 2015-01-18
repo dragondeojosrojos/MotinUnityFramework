@@ -9,6 +9,8 @@ namespace MotinGames
 
 		public string name = "";
 
+		[MotinEditorReadonlyField]
+		public string uniqueId ="";
 
 		public MotinData()
 		{
@@ -23,12 +25,13 @@ namespace MotinGames
 
 		public virtual void SetDefaultValues()
 		{
-
+			uniqueId = MotinUtils.GetUniqueString();
 		}
 
 		public virtual void OnFinishedDeserializing()
 		{
-
+			if(string.IsNullOrEmpty(uniqueId))
+				uniqueId = MotinUtils.GetUniqueString();
 		}
 		public virtual void OnWillSerialize()
 		{

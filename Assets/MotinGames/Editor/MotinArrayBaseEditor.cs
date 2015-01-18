@@ -33,12 +33,53 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		if(objectList==null  || objectList.Count==0)
 			return;
 		
-		motinEditors_.Clear();
-		//MotinEditor editor;
+		//motinEditors_.Clear();
+		MotinEditor auxEditor;
+		int editorIndex = 0;
+		for(int i = 0 ; i < objectList_.Count; i ++)
+		{
+			if(i >= motinEditors_.Count)
+			{
+					CreateInitializedEditor(objectList_[i].GetType(),objectList_[i]);
+				continue;
+			}
+			
+			editorIndex = GetEditorIndex(objectList_[i]);
+			if(editorIndex ==-1)
+			{
+				CreateInitializedEditor(objectList_[i].GetType(),objectList_[i],i);
+			}
+			else if(editorIndex == i)
+			{
+				continue;
+			}
+			else
+			{
+				auxEditor = motinEditors_[i];
+				motinEditors_[i] =  motinEditors_[editorIndex];
+				motinEditors_[editorIndex] =  auxEditor;
+			}
+		}
+		
+		for(int i = motinEditors_.Count-1 ; i >= objectList_.Count; i --)
+		{
+			motinEditors_.RemoveAt(i);
+		}
+			/*
 		foreach(object data in objectList_)
 		{
 			CreateInitializedEditor(data.GetType(),data);
 		}
+		*/
+	}
+	protected int GetEditorIndex ( object targetObject)
+	{
+		for(int i = 0 ; i < motinEditors_.Count; i ++)
+		{
+			if(motinEditors_[i].target == targetObject)
+				return i;
+		}
+		return -1;
 	}
 	protected override void targetUpdated ()
 	{
@@ -53,6 +94,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		//if( MotinUtils.IsTypeDerivedFrom(target.GetType(),typeof(ScriptSequenceData)))
 		
 	}
+	
 	protected virtual void objectListUpdated()
 	{
 		UpdateEditors();
@@ -73,6 +115,26 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		
 		Repaint();
 	}
+	
+	protected void UpdateSelectedObjectIndex()
+	{
+		if (selectedObject != null)
+		{
+			for (int i = 0; i < objectList.Count; ++i)
+			{
+				if (objectList[i] == selectedObject)
+				{
+					selectedObjectIndex = i;
+					break;
+				}
+			}
+		}
+		else
+		{
+			selectedObjectIndex = -1;
+		}
+	}
+
 	protected object selectedObject
 	{
 		get { return _selectedObject; }
@@ -337,7 +399,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		
 		
 	}
-	protected virtual MotinEditor CreateInitializedEditor(Type dataType,object target)
+	protected virtual MotinEditor CreateInitializedEditor(Type dataType,object target,int index = -1)
 	{
 		MotinEditor editor = CreateEditor(dataType);
 		editor.OnDeletePressed+=OnDeletePressedCallback;
@@ -346,7 +408,12 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		editor.OnDataChangedEditor += OnDataChangedEditorCallback;
 		editor.showListToolbar = true;
 		editor.target = target;
-		motinEditors_.Add(editor);
+
+		if(index<0)
+			motinEditors_.Add(editor);
+		else
+			motinEditors_.Insert(index,editor);
+
 		return editor;
 	}
 	protected virtual MotinEditor CreateEditor(Type dataType)
@@ -384,6 +451,8 @@ public class MotinArrayBaseEditor  : MotinEditor {
 			
 			CreateInitializedEditor(newData.GetType(),newData);
 			objectListUpdated();
+			if(selectedObject ==null)
+					selectedObject = objectList_[0];
 			//FilterList();
 			return true;
 		}

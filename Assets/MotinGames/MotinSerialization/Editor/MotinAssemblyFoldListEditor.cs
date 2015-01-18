@@ -82,7 +82,7 @@ public class MotinAssemblyFoldListEditor : MotinDataFoldListEditor  {
 	{ 
 		Debug.Log("DoCreateMenu  " + selected);
 		MotinData newData = null;
-		MotinEditor newEditor =null;
+//		MotinEditor newEditor =null;
 		
 		newData = MotinDataManager.InstanceDataFromName(menuItems[selected].text);
 	

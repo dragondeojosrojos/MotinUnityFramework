@@ -1405,11 +1405,14 @@ public class AMTake :ScriptableObject {
 	
 	public void destroy() {
 		foreach(AMTrack track in trackValues) {
-			track.destroy();
+			if(track!=null)
+				track.destroy();
 		}
-		rootGroup.destroy();
+		if(rootGroup!=null)
+			rootGroup.destroy();
 		foreach(AMGroup grp in groupValues) {
-			grp.destroy();	
+			if(grp!=null)
+				grp.destroy();	
 		}
 		DestroyImmediate(this);
 	}

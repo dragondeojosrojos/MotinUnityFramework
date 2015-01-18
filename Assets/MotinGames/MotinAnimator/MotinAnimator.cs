@@ -6,7 +6,7 @@ using System.Linq;
 
 public class MotinAnimator : MonoBehaviour {
 	// show
-	
+	public bool					useRealTime = false;
 	public TextAsset			dataFile;
 	public MotinAnimatorData	animatorData;
 	
@@ -17,6 +17,7 @@ public class MotinAnimator : MonoBehaviour {
 	
 	private float tmpStartFrame =0;
 	private float tmpStartTime =0;
+	private float tmpLastFrameTime = 0;
 	// hide
 	
 	[HideInInspector] public bool isPlaying {
@@ -211,7 +212,14 @@ public class MotinAnimator : MonoBehaviour {
 
 			return;
 		}
-		elapsedTime += Time.deltaTime;
+		if(useRealTime)
+		{
+			elapsedTime +=  (Time.realtimeSinceStartup - tmpLastFrameTime);
+			tmpLastFrameTime = Time.realtimeSinceStartup;
+		}
+		else
+			elapsedTime += Time.deltaTime;
+
 		if(elapsedTime >= takeTime) 
 		{
 			/*
@@ -299,6 +307,9 @@ public class MotinAnimator : MonoBehaviour {
 //		Debug.Log("EXECUTE TAKE " + take.name);
 		tmpStartFrame = value;
 		tmpStartTime = value;
+		if(useRealTime)
+			tmpLastFrameTime =Time.realtimeSinceStartup;
+
 		if(!isFrame) tmpStartFrame *= take.frameRate;	// convert time to frame
 		if(isFrame) tmpStartTime /= take.frameRate;	// convert frame to time
 		

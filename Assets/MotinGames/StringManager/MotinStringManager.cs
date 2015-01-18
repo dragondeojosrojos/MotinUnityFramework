@@ -152,7 +152,7 @@ public class MotinStringManager : MonoBehaviour {
 
 		int len;
 
-		int charIndex = 0;
+//		int charIndex = 0;
 		
 		bool isAsianFont = (currentLang == LANG.CH || 
 	                            currentLang == LANG.JA ||

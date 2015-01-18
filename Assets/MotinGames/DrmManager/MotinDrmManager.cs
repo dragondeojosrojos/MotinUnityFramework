@@ -62,7 +62,7 @@ public class MotinDrmManager : MonoBehaviour {
 
 	void Start()
 	{
-		System.DateTime registeredTime = System.DateTime.Parse(PlayerPrefs.GetString(KEY_LAST_TEST));
+//		System.DateTime registeredTime = System.DateTime.Parse(PlayerPrefs.GetString(KEY_LAST_TEST));
 		//if(/*(System.DateTime.UtcNow-  registeredTime ).Days >=1 || */!isUnlocked())
 		//{
 			StartCoroutine(TestDrm());

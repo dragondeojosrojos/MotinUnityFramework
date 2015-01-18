@@ -42,7 +42,7 @@ public class MotinFoldListEditor  : MotinEditor {
 			return;
 		
 		motinEditors_.Clear();
-		MotinEditor editor;
+//		MotinEditor editor;
 		foreach(object data in objectList_)
 		{
 			CreateInitializedEditor(data.GetType(),data);
@@ -385,9 +385,9 @@ public class MotinFoldListEditor  : MotinEditor {
 			listScroll = GUILayout.BeginScrollView(listScroll,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 				GUILayout.BeginVertical(MotinEditorSkin.SC_ListBoxBG, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 		
-				int index =0;
+				//int index =0;
 				//Debug.Log("FILTERED DATAS " + filteredObjects.Count);
-				foreach (object data in filteredObjects)
+				for (int index =0; index < filteredObjects.Count;index++)// (object data in filteredObjects)
 				{
 				    GUILayout.BeginHorizontal(MotinEditorSkin.SC_ListBoxBG, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
 					//motinEditors_[index].target = data;
@@ -395,7 +395,7 @@ public class MotinFoldListEditor  : MotinEditor {
 					DrawItem(index);
 				
 				   	GUILayout.EndHorizontal();
-					index++;
+					//index++;
 					
 					if(cancelUpdate)
 						break;
