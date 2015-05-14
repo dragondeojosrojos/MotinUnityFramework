@@ -65,7 +65,7 @@ public class HOTweenDemoBrain : MonoBehaviour
         // (which can be done since the cube uses a transparent material).
         // The Sequence will also be set to loop.
         // Note that Sequences don't start automatically, so you'll have to call Play().
-        Color colorTo = CubeTrans3.renderer.material.color;
+        Color colorTo = CubeTrans3.GetComponent<Renderer>().material.color;
         colorTo.a = 0;
         Sequence sequence = new Sequence(new SequenceParms().Loops(-1, LoopType.Yoyo));
         // "Append" will add a tween after the previous one/s have completed
@@ -74,7 +74,7 @@ public class HOTweenDemoBrain : MonoBehaviour
         sequence.Append(HOTween.To(CubeTrans3, 1, new TweenParms().Prop("rotation", new Vector3(0, 360, 0))));
         // "Insert" lets you insert a tween where you want
         // (in this case we're having it start at half the sequence and last until the end)
-        sequence.Insert(sequence.duration * 0.5f, HOTween.To(CubeTrans3.renderer.material, sequence.duration * 0.5f, new TweenParms().Prop("color", colorTo)));
+        sequence.Insert(sequence.duration * 0.5f, HOTween.To(CubeTrans3.GetComponent<Renderer>().material, sequence.duration * 0.5f, new TweenParms().Prop("color", colorTo)));
         // Start the sequence animation
         sequence.Play();
     }

@@ -22,9 +22,9 @@ public class MotinEditorSoundEnumField: Attribute {
 	}
 }
 
-public class MotinEditorStringEnumField: Attribute {
+public class MotinEditorLocalizationEnumField: Attribute {
 	
-	public MotinEditorStringEnumField() {
+	public MotinEditorLocalizationEnumField() {
 		
 	}
 }

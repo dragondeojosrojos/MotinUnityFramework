@@ -25,7 +25,7 @@ public class MotinStringEditor : MotinEditor  {
 		
 		Repaint();
 	}
-	public MotinStringEditor(EditorWindow host):base(host)
+	public MotinStringEditor(EditorWindow host):base(host,null)
 	{
 		
 		List<string> names = new List<string>(MotinUtils.EnumNames<MotinStrings>() );
@@ -48,7 +48,7 @@ public class MotinStringEditor : MotinEditor  {
 			{
 				selectedIndex = index;
 				UpdateTarget();
-				RaiseOnDataChanged();
+				RaiseOnFieldValueChanged(target,null);
 			}
 	
 	

@@ -6,46 +6,52 @@ using System.Collections.Generic;
 namespace MotinGames
 {
 
-[CustomEditor(typeof(MotinPoolManager))]
-public class MotinPoolManagerInspector : Editor {
+	[CustomEditor(typeof(MotinPoolManager))]
+	public class MotinPoolManagerInspector : Editor {
 
-	public	MotinPoolManager poolManager= null;
+		public	MotinPoolManager poolManager= null;
 
-	MotinPoolManagerEditor poolManagerEditor = null;
-	
-	void OnEnable()
-	{
-		if(poolManager==null)
+		MotinPoolManagerEditor poolManagerEditor = null;
+		
+		void OnEnable()
 		{
-			poolManager = (MotinPoolManager)target;
+			if(poolManager==null)
+			{
+				poolManager = (MotinPoolManager)target;
+			}
+
+			if(poolManagerEditor == null)
+			{
+				poolManagerEditor = new MotinPoolManagerEditor();
+				poolManagerEditor.OnEditorChanged+=OnEditorChanged;
+				poolManagerEditor.target = poolManager;
+			}
+
+		}
+		void OnDisable()
+		{
+			if(poolManagerEditor != null)
+			{
+				poolManagerEditor.OnEditorChanged-=OnEditorChanged;
+				poolManagerEditor.Destroy();
+				poolManagerEditor = null;
+			}
+			if(poolManager!=null)
+			{
+				poolManager = null;
+			}
 		}
 
-		if(poolManagerEditor == null)
+		public override void OnInspectorGUI()
 		{
-			poolManagerEditor = new MotinPoolManagerEditor();
-
-
+			poolManagerEditor.Draw(new Rect(0,0,300,300));
 		}
 
+		void OnEditorChanged()
+		{
+			EditorUtility.SetDirty(poolManager);
+			AssetDatabase.SaveAssets();
+		}
+		
 	}
-	void OnDisable()
-	{
-		if(poolManagerEditor != null)
-		{
-			poolManagerEditor.Destroy();
-			poolManagerEditor = null;
-		}
-		if(poolManager!=null)
-		{
-			poolManager = null;
-		}
-	}
-
-	public override void OnInspectorGUI()
-	{
-		poolManagerEditor.target = poolManager;
-		poolManagerEditor.Draw(new Rect(0,0,300,300));
-	}
-	
-}
 }

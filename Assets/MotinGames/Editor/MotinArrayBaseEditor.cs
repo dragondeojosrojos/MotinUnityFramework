@@ -10,9 +10,13 @@ namespace MotinGames
 
 public class MotinArrayBaseEditor  : MotinEditor {
 
+	public System.Action<MotinData,int> OnInitializeData = null;
+	
 	public bool childEditorsExpandHeight = true;
 	public List<Type> 	typesList = new List<Type>();
 	public List<string> namespaceList = new List<string>();
+	
+	protected Type[] 	   menuTypes = new Type[0];
 	protected GUIContent[] menuItems = new GUIContent[0];
 
 			
@@ -23,7 +27,8 @@ public class MotinArrayBaseEditor  : MotinEditor {
 	protected  object 			_selectedObject;
 	protected  int 				selectedObjectIndex = -1;
 	
-	protected  List<MotinEditor> 	motinEditors_ = new List<MotinEditor>();
+	//protected  List<MotinEditor> 	motinEditors_ = new List<MotinEditor>();
+
 	protected  List<MotinEditor> 	filteredEditors_ = new List<MotinEditor>();
 	
 	protected bool cancelUpdate = false;
@@ -40,7 +45,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		{
 			if(i >= motinEditors_.Count)
 			{
-					CreateInitializedEditor(objectList_[i].GetType(),objectList_[i]);
+				CreateInitializedEditor(objectList_[i].GetType(),objectList_[i]);
 				continue;
 			}
 			
@@ -72,6 +77,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		}
 		*/
 	}
+		/*
 	protected int GetEditorIndex ( object targetObject)
 	{
 		for(int i = 0 ; i < motinEditors_.Count; i ++)
@@ -81,9 +87,10 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		}
 		return -1;
 	}
+	*/
 	protected override void targetUpdated ()
 	{
-		base.targetUpdated ();
+		//base.targetUpdated ();
 
 			//Debug.Log("Target Type = " + target.GetType().ToString() );
 		if(target.GetType().IsGenericType && target.GetType().GetGenericTypeDefinition() == typeof(List<>))
@@ -104,9 +111,10 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		
 		FilterList();
 
-		if (selectedObjectIndex != -1 && selectedObjectIndex < objectList_.Count)
+		//if (selectedObjectIndex != -1 && selectedObjectIndex < objectList_.Count)
+		if (selectedObject != null )
 		{
-			selectedObject = objectList_[selectedObjectIndex];
+			selectedObject = selectedObject;
 		}
 		else
 		{
@@ -143,9 +151,9 @@ public class MotinArrayBaseEditor  : MotinEditor {
 			selectedObjectIndex = -1;
 			if (value != null)
 			{
-				for (int i = 0; i < objectList.Count; ++i)
+				for (int i = 0; i < filteredObjects.Count; ++i)
 				{
-					if (objectList[i] == value)
+					if (filteredObjects[i] == value)
 					{
 						_selectedObject = value;
 						selectedObjectIndex = i;
@@ -155,7 +163,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 			}
 			if (selectedObjectIndex == -1)
 			{
-				if (value != null) Debug.LogError("Unable to find clip");
+				if (value != null) Debug.Log("Unable to find selected object");
 				_selectedObject = null;
 			}
 		}
@@ -189,21 +197,21 @@ public class MotinArrayBaseEditor  : MotinEditor {
 	public MotinArrayBaseEditor(System.Type type ):base()
 	{
 		AddType(type);
-		UpdateCreateMenu();
+		//UpdateCreateMenu();
 	}
 
-	public MotinArrayBaseEditor(EditorWindow host,System.Type type): base(host)
+	public MotinArrayBaseEditor(EditorWindow host,System.Type type): base(host,null)
 	{
 		AddType(type);
-		UpdateCreateMenu();
+		//UpdateCreateMenu();
 	}
 	public MotinArrayBaseEditor(string NamespaceName ):base()
 	{
 		AddNamespace(NamespaceName);
-		UpdateCreateMenu();
+		//UpdateCreateMenu();
 	}
 	
-	public MotinArrayBaseEditor(EditorWindow host,string NamespaceName): base(host)
+	public MotinArrayBaseEditor(EditorWindow host,string NamespaceName): base(host,null)
 	{
 		AddNamespace(NamespaceName);
 		UpdateCreateMenu();
@@ -246,22 +254,39 @@ public class MotinArrayBaseEditor  : MotinEditor {
 	{
 		System.Type[] types = null;
 		List<GUIContent> Items = new List<GUIContent>();
+		List<Type> foundTypes = new List<Type>();
+
 		foreach(string namespaceName in namespaceList)
 		{
 			
 			types = MotinUtils.GetTypesInNamespace(System.Reflection.Assembly.Load("Assembly-CSharp"),namespaceName);
 			foreach(Type type in types)
 			{
-				Items.Add(new GUIContent(type.FullName));
+				foundTypes.Add(type);
 			}
 		}
 
 		foreach(Type type in typesList)
 		{
-			Items.Add(new GUIContent(type.FullName));
+			foundTypes.Add(type);
+		}
+
+		MotinEditorClassCreateMenuName[] createMenuAttr = null;
+		foreach(Type type in foundTypes)
+		{
+			createMenuAttr = (MotinEditorClassCreateMenuName[])type.GetCustomAttributes(typeof(MotinEditorClassCreateMenuName),false);
+			if(createMenuAttr!=null && createMenuAttr.Length>0)
+			{
+				Items.Add(new GUIContent(createMenuAttr[0].name));
+			}
+			else
+			{
+				Items.Add(new GUIContent(type.FullName));	
+			}
 		}
 
 		this.menuItems = Items.ToArray();
+		this.menuTypes = foundTypes.ToArray();
 	}
 	public void ObjectSelectionChanged(MotinData data, int direction)
 	{
@@ -318,8 +343,8 @@ public class MotinArrayBaseEditor  : MotinEditor {
 			CreateNewData();
 		*/
 		
-		FilterList();
-		
+		//FilterList();
+		objectListUpdated();
 		if(objectList.Count==0)
 		{
 			selectedObjectIndex =-1;
@@ -332,9 +357,11 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		}
 
 		cancelUpdate = true;
-		objectListUpdated();
+		
 
-		RaiseOnDataChanged();
+		RaiseOnEditorChanged();
+		
+		//RaiseOnDataChanged();
 		
 
 		Repaint();
@@ -363,15 +390,18 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		cancelUpdate = true;
 		objectListUpdated();
 
-		RaiseOnDataChanged();
+			RaiseOnEditorChanged();
+		//RaiseOnDataChanged();
 		
 
 		Repaint();
 	}
+		/*
 	public virtual void OnDataChangedEditorCallback(MotinEditor editor)
 	{
 		RaiseOnDataChanged();
 	}
+	*/
 	public void OnDownPressedCallback(MotinEditor editor)
 	{
 		int index = objectList_.IndexOf((MotinData)editor.target);
@@ -392,67 +422,55 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		cancelUpdate = true;
 		objectListUpdated();
 
+		RaiseOnEditorChanged();
 		//FilterList();
-		RaiseOnDataChanged();
+		//RaiseOnDataChanged();
 
 		Repaint();
 		
 		
 	}
-	protected virtual MotinEditor CreateInitializedEditor(Type dataType,object target,int index = -1)
+
+	
+	protected override MotinEditor CreateInitializedEditor (MotinEditor newEditor, object editorTarget, int index)
 	{
-		MotinEditor editor = CreateEditor(dataType);
+		MotinEditor editor =  base.CreateInitializedEditor (newEditor, editorTarget, index);
+		if(editor==null)
+			return null;
+
 		editor.OnDeletePressed+=OnDeletePressedCallback;
 		editor.OnUpPressed += OnUpPressedCallback;
 		editor.OnDownPressed += OnDownPressedCallback;
-		editor.OnDataChangedEditor += OnDataChangedEditorCallback;
 		editor.showListToolbar = true;
-		editor.target = target;
-
-		if(index<0)
-			motinEditors_.Add(editor);
-		else
-			motinEditors_.Insert(index,editor);
 
 		return editor;
-	}
-	protected virtual MotinEditor CreateEditor(Type dataType)
-	{
-		//Debug.Log (" DATA TYPE " + dataType.Name);
-		Type editorType = Types.GetType(dataType.Name + "Editor","Assembly-CSharp-Editor");
-		if(editorType!=null)
-		{
-			MotinEditor editor = (MotinEditor)System.Activator.CreateInstance(editorType);
-			return editor;
-		}
-		
-		if(MotinUtils.IsTypeDerivedFrom(dataType,typeof(MotinData)))
-		{
-			return new MotinDataEditor(hostEditorWindow);
-		}
-		
-		return new MotinEditor(hostEditorWindow);
-		
+
 	}
 	
 	protected virtual bool DoCreateMenu(int selected)
 	{
-		Debug.Log("DoCreateMenu  " + selected);
+//		Debug.Log("DoCreateMenu  " + selected);
 		object newData = null;
 		//MotinEditor newEditor =null;
 		
-		newData = MotinDataManager.InstanceFromName(menuItems[selected].text);
+		newData = MotinDataManager.InstanceFromName(menuTypes[selected].FullName);
 		
 		
 		if(newData!=null)
 		{
 			InitializeCreatedObject(newData);
 			objectList_.Add(newData);
+			UpdateTargetList();
+			if(OnInitializeData!=null)
+					OnInitializeData((MotinData)newData,objectList_.Count-1);
 			
 			CreateInitializedEditor(newData.GetType(),newData);
+
 			objectListUpdated();
-			if(selectedObject ==null)
-					selectedObject = objectList_[0];
+			//if(selectedObject ==null)
+			selectedObject =newData;
+			
+			
 			//FilterList();
 			return true;
 		}
@@ -462,10 +480,26 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		
 
 	}
+	void UpdateTargetList()
+	{
+		
+		System.Type listType = typeof(List<>);
+		Type[] genericArgs = target_.GetType().GetGenericArguments();
+		Type concreteType = listType.MakeGenericType(genericArgs);
+		object newList = Activator.CreateInstance(concreteType);
+		
+		foreach(object obj in objectList_)
+		{
+			concreteType.GetMethod("Add").Invoke(newList,new object[]{obj});
+
+		}
+		
+		target_ = newList;
+	}
 	protected virtual void InitializeCreatedObject(object newObject)
 	{
-        if(newObject.GetType().IsSubclassOf(typeof(MotinData)))
-			((MotinData)newObject).SetDefaultValues();
+       // if(newObject.GetType().IsSubclassOf(typeof(MotinData)))
+		//	((MotinData)newObject).SetDefaultValues();
 	}
 	protected void DrawCreateMenu()
 	{
@@ -484,7 +518,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 				{
 					if(DoCreateMenu(selected))
 					{
-						RaiseOnDataChanged();
+						RaiseOnEditorChanged();
 						Repaint();
 					}
 				}
@@ -533,17 +567,20 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		
 	}
 	
+
+		float contentHeight =0;
 	protected override void DoDraw()
 	{ 
 		cancelUpdate = false;
+		
 		//MotinEditor[] editors = motinEditors_.ToArray();
 		if (objectList != null )
 		{
 			//GUILayout.BeginVertical(GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
 			//DrawFields();
-			listScroll = GUILayout.BeginScrollView(listScroll,GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
-			GUILayout.BeginVertical(MotinEditorSkin.SC_ListBoxBG, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(false));
-			
+				listScroll = GUILayout.BeginScrollView(listScroll,GUILayout.ExpandWidth(true),  GUILayout.Height(contentHeight));
+				GUILayout.BeginVertical(MotinEditorSkin.SC_ListBoxBG, GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
+				contentHeight =0;
 			//int index =0;
 			//Debug.Log("FILTERED DATAS " + filteredObjects.Count);
 			for(int i = 0 ; i < filteredObjects.Count;i++)
@@ -559,9 +596,9 @@ public class MotinArrayBaseEditor  : MotinEditor {
 				if(cancelUpdate)
 					break;
 			}
-			
+
 			GUILayout.EndVertical();
-			GUILayout.EndScrollView();
+				GUILayout.EndScrollView();
 			//GUILayout.EndVertical();
 		}
 		
@@ -570,7 +607,15 @@ public class MotinArrayBaseEditor  : MotinEditor {
 	Vector2 listScroll = Vector2.zero;
 	protected virtual void DrawItem(int index)
 	{
-			filteredEditors_[index].Draw(new Rect(0,0,editorRect.width,600),childEditorsExpandHeight);
+			/*
+			GUILayout.BeginHorizontal();
+			if(parentEditor!=null)
+				GUILayout.Space(10);
+*/
+			filteredEditors_[index].Draw(new Rect(0,0,editorRect.width,filteredEditors_[index].editorContentRect.height),false);
+			contentHeight+=filteredEditors_[index].editorContentRect.height;
+
+			//GUILayout.EndHorizontal();
 	}
 	/*
 	protected override bool DrawField (object value, System.Reflection.FieldInfo field)

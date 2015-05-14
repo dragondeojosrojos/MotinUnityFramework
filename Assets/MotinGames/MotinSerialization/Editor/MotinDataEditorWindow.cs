@@ -60,10 +60,17 @@ public class MotinDataEditorWindow : EditorWindow  {
 			}
 		}
 		
+		OnDataLoaded();
+
 		if(dataEditor!=null)
 			dataEditor.target = loadedData;
 		
 		EditorUtility.SetDirty(this);
+	}
+
+	protected virtual void OnDataLoaded()
+	{
+
 	}
 	/*
 	void MirrorEntityDatas()
@@ -222,16 +229,14 @@ public class MotinDataEditorWindow : EditorWindow  {
 	
 	public void OnGUI()
 	{ 
-	
-		 
+
 		GUILayout.BeginVertical(GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
 		
 		DrawToolbar();
 		
 		if ( dataEditor!=null)
 		{
-			dataEditor.Draw(new Rect(0,0,window.position.width,window.position.height));
-			
+			dataEditor.Draw(new Rect(0,0,window.position.width,window.position.height),true);
 		} 
 		
 		GUILayout.EndVertical();

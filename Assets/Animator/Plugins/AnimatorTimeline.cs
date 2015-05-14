@@ -504,7 +504,7 @@ public class AnimatorTimeline : MonoBehaviour {
 			if(init.strings != null && init.strings.Length > 0) {
 				allCameras = new Camera[init.strings.Length];
 				for(int i=0;i<init.strings.Length;i++) {
-					allCameras[i] = getGO(init.strings[i]).camera;
+					allCameras[i] = getGO(init.strings[i]).GetComponent<Camera>();
 				}
 			}
 			// setup all textures
@@ -517,7 +517,7 @@ public class AnimatorTimeline : MonoBehaviour {
 			// set top camera
 			if(init.typeExtra == "camera") {
 				if(init.go == null) return false;
-				AMTween.SetTopCamera(getGO(init.go).camera,allCameras);
+				AMTween.SetTopCamera(getGO(init.go).GetComponent<Camera>(),allCameras);
 			} else {
 				if(init._color == null) return false;
 				AMTween.ShowColor(init._color.toColor());
@@ -615,9 +615,9 @@ public class AnimatorTimeline : MonoBehaviour {
 		if(a.bools != null && a.bools.Length > 0) hash.Add("reversed",a.bools[0]);
 		if(a.ints[1] == 0 || a.ints[2] == 0) hash.Add("allcameras",allCameras);
 		if(a.stringsExtra != null && a.stringsExtra.Length > 0) hash.Add("texture",AMTween.LoadTexture2D(a.stringsExtra[0]));
-		if(a.ints[1] == 0) hash.Add("camera1",getGO(a.strings[0]).camera);
+		if(a.ints[1] == 0) hash.Add("camera1",getGO(a.strings[0]).GetComponent<Camera>());
 		else hash.Add("color1",a.colors[0].toColor());
-		if(a.ints[2] == 0) hash.Add("camera2",getGO(a.strings[1]).camera);
+		if(a.ints[2] == 0) hash.Add("camera2",getGO(a.strings[1]).GetComponent<Camera>());
 		else hash.Add("color2",a.colors[1].toColor());
 		
 		float[] parameters = a.floats;

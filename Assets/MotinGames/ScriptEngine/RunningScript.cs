@@ -17,8 +17,8 @@ namespace MotinGames
 
 
 
-		public MotinScript.MotinScriptDelegate OnComplete=null;
-		public MotinScript.MotinScriptDelegate OnFailed=null;
+		public System.Action<MotinScript> OnFinished=null;
+		//public System.Action<MotinScript> OnFailed=null;
 
 		public int scriptType = 0;
 		public MotinScript script= null;
@@ -28,8 +28,8 @@ namespace MotinGames
 		{
 			script = null;
 			scriptType = 0;
-			OnComplete = null;
-			OnFailed = null;
+			OnFinished = null;
+			//OnFailed = null;
 			//fsmScript = null;
 		}
 		public RunningScript( )
@@ -37,15 +37,15 @@ namespace MotinGames
 			Reset();
 		}
 		
-		public RunningScript(MotinScript runScript,MotinScript.MotinScriptDelegate onComplete = null,MotinScript.MotinScriptDelegate onFailed = null )
+		public RunningScript(MotinScript runScript,System.Action<MotinScript> OnFinished = null )
 		{
 			script = runScript;
 			scriptType = (int)ScriptTypes.MotinScript;
-			OnComplete = onComplete;
-			OnFailed = onFailed;
+			this.OnFinished = OnFinished;
+			//OnFailed = onFailed;
 		}
 		/*
-		public RunningScript(Fsm runScript,MotinScript.MotinScriptDelegate onComplete = null,MotinScript.MotinScriptDelegate onFailed = null )
+		public RunningScript(Fsm runScript,System.Action<MotinScript> onComplete = null,System.Action<MotinScript> onFailed = null )
 		{
 			scriptType = (int)ScriptTypes.Playmaker;
 			fsmScript = runScript;

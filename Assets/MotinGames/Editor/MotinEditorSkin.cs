@@ -10,19 +10,24 @@ public class MotinEditorSkin  {
 	// Sprite collection editor styles
 	public static void Init()
 	{
-		isProSkin = EditorGUIUtility.isProSkin;
+
 		if(editorSkin==null)
 		{
-			if(isProSkin)
-			{
-				editorSkin = (GUISkin)(Resources.LoadAssetAtPath("Assets/MotinGames/Editor/Skin/MotinPro.guiskin", typeof(GUISkin)));
-			}
-			else
-			{
-				editorSkin = (GUISkin)(Resources.LoadAssetAtPath("Assets/MotinGames/Editor/Skin/MotinFree.guiskin", typeof(GUISkin)));
-			}
+			RefreshSkin();
 
+		}
+	}
 
+	public static void RefreshSkin()
+	{
+		isProSkin = EditorGUIUtility.isProSkin;
+		if(isProSkin)
+		{
+			editorSkin = (GUISkin)(Resources.LoadAssetAtPath("Assets/MotinGames/Editor/Skin/MotinPro.guiskin", typeof(GUISkin)));
+		}
+		else
+		{
+			editorSkin = (GUISkin)(Resources.LoadAssetAtPath("Assets/MotinGames/Editor/Skin/MotinFree.guiskin", typeof(GUISkin)));
 		}
 	}
 	
@@ -53,4 +58,6 @@ public class MotinEditorSkin  {
 	
 	public static GUIStyle WhiteBox { get { Init(); return GetStyle("WhiteBox"); } }
 	public static GUIStyle Selection { get { Init(); return GetStyle("Selection"); } }
+
+	public static GUIStyle EditorBody { get { Init(); return GetStyle("EditorBody"); } }
 }

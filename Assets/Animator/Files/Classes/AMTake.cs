@@ -165,7 +165,7 @@ public class AMTake :ScriptableObject {
 	// add camera swithcer track
 	public void addCameraSwitcherTrack(GameObject obj) {
 		if(cameraSwitcher) {
-			if(obj.camera) cameraSwitcher.addKey(selectedFrame, obj.camera);
+			if(obj.GetComponent<Camera>()) cameraSwitcher.addKey(selectedFrame, obj.GetComponent<Camera>());
 			return;	
 		}
 		AMCameraSwitcherTrack a = ScriptableObject.CreateInstance<AMCameraSwitcherTrack>();
@@ -1254,7 +1254,7 @@ public class AMTake :ScriptableObject {
 		foreach(AMTrack track in trackValues) {
 				if(!(track is AMAnimationTrack)) continue;
 				if((track as AMAnimationTrack).obj) {
-					(track as AMAnimationTrack).obj.animation.Stop();
+					(track as AMAnimationTrack).obj.GetComponent<Animation>().Stop();
 				}
 		}
 	}

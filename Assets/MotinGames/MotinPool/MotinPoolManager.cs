@@ -5,7 +5,7 @@ namespace MotinGames
 {
 public class MotinPoolManager : MonoBehaviour
 {
-	public MotinGameObjectPoolData[] poolDatas;
+	public MotinGameObjectPoolData[] poolDatas = new MotinGameObjectPoolData[0];
 	public bool createPoolsOnStart = true;
 
 
@@ -131,6 +131,18 @@ public class MotinPoolManager : MonoBehaviour
 		}
 		poolList_.Clear();
 	}
+
+
+	public void SpawnMotinParticleSystem(string poolName,Vector3 spawnPosition)
+	{
+		//Debug.Log("SpawnMotinParticleSystem " + poolName);
+		MotinParticleSystem particleSys =  getPoolByName(poolName).Spawn(spawnPosition).GetComponent<MotinParticleSystem>();
+		if(particleSys)
+		{
+			particleSys.Play();
+		}
+	}
+
 
 	void OnApplicationQuit() {
 		isQuitting = true;

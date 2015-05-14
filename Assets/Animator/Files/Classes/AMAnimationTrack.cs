@@ -73,7 +73,12 @@ public class AMAnimationTrack : AMTrack {
 					// do nothing
 				} else { 
 					amClip.wrapMode = (cache[i] as AMAnimationAction).wrapMode;
+				#if UNITY_5
+					amClip.SampleAnimation(obj,getTime (frameRate,frame-cache[i].startFrame));
+				#else
 					obj.SampleAnimation(amClip,getTime (frameRate,frame-cache[i].startFrame));
+				#endif
+
 				}
 				found = true;
 				break;
@@ -81,7 +86,11 @@ public class AMAnimationTrack : AMTrack {
 					
 		}
 		// sample default animation if not found
+		#if UNITY_5
+		if(!found && obj.GetComponent<Animation>() && obj.GetComponent<Animation>().clip) obj.GetComponent<Animation>().clip.SampleAnimation(obj,0f);
+		#else
 		if(!found && obj.animation.clip) obj.SampleAnimation(obj.animation.clip,0f);
+		#endif
 	}
 	public float getTime(float frameRate,float numberOfFrames) {
 		return (float)numberOfFrames/(float)frameRate;	

@@ -8,6 +8,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 using System.Reflection;
 using System.Linq;
+
+public enum MotinEditorTypes{
+	DEFAULT,
+	BASE_ARRAY,
+	LIST_EDITOR
+}
+
+
 public class MotinUtils  {
 	
 	public struct Tuple<T1, T2> {
@@ -60,6 +68,21 @@ public class MotinUtils  {
 		for(int i = 0 ; i < count;i++)
 		{
 			if(stringArray[i] == value)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	public static int IntArrayIndex(int[] intArray,int value)
+	{
+		if(intArray==null || value==null)
+			return -1;
+		
+		int count  =  intArray.Length;
+		for(int i = 0 ; i < count;i++)
+		{
+			if(intArray[i] == value)
 			{
 				return i;
 			}
@@ -172,6 +195,49 @@ public class MotinUtils  {
 		return value % 2 != 0;
 	}
 
+
+	// Note that Color32 and Color implictly convert to each other. You may pass a Color object to this method without first casting it.
+	public static string ColorToHex(Color32 color)
+	{
+		string hex = color.r.ToString("X2") + color.g.ToString("X2") + color.b.ToString("X2")+color.a.ToString("X2");
+		return hex;
+	}
+	
+	public static Color HexToColor(string hex)
+	{
+		byte r = byte.Parse(hex.Substring(0,2), System.Globalization.NumberStyles.HexNumber);
+		byte g = byte.Parse(hex.Substring(2,2), System.Globalization.NumberStyles.HexNumber);
+		byte b = byte.Parse(hex.Substring(4,2), System.Globalization.NumberStyles.HexNumber);
+		byte a = byte.Parse(hex.Substring(6,2), System.Globalization.NumberStyles.HexNumber);
+		return new Color32(r,g,b, a);
+	}
+
+	public static float SignedAngleBetween(Vector3 a, Vector3 b, Vector3 n){
+		// angle in [0,180]
+		float angle = Vector3.Angle(a,b);
+		float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a,b)));
+		
+		// angle in [-179,180]
+		float signed_angle = angle * sign;
+		
+		// angle in [0,360] (not used but included here for completeness)
+		//float angle360 =  (signed_angle + 180) % 360;
+		
+		return signed_angle;
+	}
+	public static float SignedAngle360Between(Vector3 a, Vector3 b, Vector3 n){
+		// angle in [0,180]
+		float angle = Vector3.Angle(a,b);
+		float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a,b)));
+		
+		// angle in [-179,180]
+		float signed_angle = angle * sign;
+		
+		// angle in [0,360] (not used but included here for completeness)
+		float angle360 =  (signed_angle + 180) % 360;
+		
+		return angle360;
+	}
 	//NEEDS TK2D
 	/*
 	static tk2dBaseSprite tmpSprite;

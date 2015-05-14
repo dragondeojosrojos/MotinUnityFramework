@@ -44,6 +44,20 @@ public class MotinDemoController : MonoBehaviour {
 		{
 			MotinSoundManager.sharedManager().PlayFx(SoundDefinitions.Sounds.FX_COMBO_GREAT);
 		}
+		if(MotinWindowManager.sharedManager().GetWindow("MainMenu").WindowState == (int)MotinWindow.WindowStates.Closed)
+		{
+			if(GUILayout.Button("Show WIndow",GUILayout.Width(100),GUILayout.Height(50)))
+			{
+				MotinWindowManager.sharedManager().ShowWindow("MainMenu",false);
+			}
+		}
+		else
+		{
+			if(GUILayout.Button("Dismiss window",GUILayout.Width(100),GUILayout.Height(50)))
+			{
+				MotinWindowManager.sharedManager().DismissWindow("MainMenu");
+			}
+		}
 		GUILayout.EndHorizontal();
 		foreach(MotinTouch touch in MotinInputManager.sharedManager().touchList)
 		{

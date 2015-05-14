@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-//using HutongGames.PlayMaker;
 using System.Reflection;
 
 namespace MotinGames
@@ -26,7 +25,6 @@ namespace MotinGames
 		static bool 				isPoolInitialized = false;
 
 		List<RunningScript> runningScripts 		= new List<RunningScript>();
-	//	Dictionary<string,Fsm>	fsmDict	=	new Dictionary<string, Fsm>();
 		public  ScriptSequenceData			scriptSequences=null;
 
 
@@ -71,7 +69,7 @@ namespace MotinGames
 		}
 
 
-		public virtual MotinScript CreateMotinScriptFromData(MotinData scriptData)
+		public virtual MotinScript CreateMotinScriptFromData(MotinData scriptData, string namespaceName = "" )
 		{
 			System.Type dataType = scriptData.GetType();
 			
@@ -79,38 +77,9 @@ namespace MotinGames
 			{
 				return new ScriptSequence(this,scriptData);
 			}
-			/*
-			else if(dataType == typeof(ScriptPlayAnimTk2dData)){
-				return new ScriptPlayAnimTk2d(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptPlayAnimAnimatorData)){
-				return new ScriptPlayAnimAnimator(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptRunScriptFsmData)){
-				return new MotinRunFsm(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptPlayAnimAnimatedObjectData)){
-				return new ScriptAnimatedObjectPlayAnimator(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptShowWindowData)){
-				return new ScriptShowWindow(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptShowPopupData)){
-				return new ScriptShowPopupWindow(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptShowMaskData)){
-				return new ScriptShowMask(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptDismissWindowData)){
-				return new ScriptDismissWindow(this,scriptData);
-			}
-			else if(dataType == typeof(ScriptSetMaskTargetData)){
-				return new ScriptSetTargetMask(this,scriptData);
-			}
-			*/
 			else
 			{
-				MotinScript script =  (MotinScript)System.Activator.CreateInstance(Types.GetType(dataType.ToString().Replace("Data",""),"Assembly-CSharp"),this,scriptData);
+				MotinScript script =  (MotinScript)System.Activator.CreateInstance(Types.GetType( (string.IsNullOrEmpty(namespaceName)? "" : (namespaceName + ".")) +  dataType.ToString().Replace("Data",""),"Assembly-CSharp"),this,scriptData);
 				if(script!=null)
 				{
 					//script.scriptEngine = this;
@@ -131,13 +100,7 @@ namespace MotinGames
 
 			scriptSequences = null;
 
-			/*
-			PlayMakerFSM[] fsmScripts =  this.GetComponents<PlayMakerFSM>();
-			foreach(PlayMakerFSM fsm in fsmScripts)
-			{
-				fsmDict.Add(fsm.FsmName,fsm.Fsm);
-			}
-			*/
+		
 		}
 		
 		void Start()
@@ -194,107 +157,89 @@ namespace MotinGames
 			
 			return scriptSequences.GetDataByName(name);
 		}
-		/*
-		public Fsm GetFsm(string name)
-		{
-			Fsm script = null;
-			fsmDict.TryGetValue(name,out script);
-			if(script==null)
-			{
-				Debug.Log("FSM SCRIPT NOT FOUND " + name);
-				return null;
-			}
-			
-			return script;
-		}
-		*/
-		/*
-		public void SetFsmVar(string fsmName,string fsmVarName,GameObject value)
-		{
-			Fsm script = GetFsm(fsmName);
-			if(script==null)
-			{
-				return;
-			}
-			
-			script.Variables.GetFsmGameObject(fsmVarName).Value = value;
-		}
-		*/
-		public void runMotinScript(string name,MotinScript.MotinScriptDelegate onComplete = null,MotinScript.MotinScriptDelegate onFailed=null)
+
+		public void runMotinScript(string name,Hashtable contextData = null,System.Action<MotinScript> OnFinished = null)
 		{
 	//		Debug.Log("runMotinScript " + name);
-			runScript(getScript(name),onComplete,onFailed);
+			runScript(getScript(name),contextData,OnFinished);
 		}
 
-		/*
-		public void runScript(string name , MotinScript.MotinScriptDelegate onComplete = null, MotinScript.MotinScriptDelegate onFailed = null )
-		{
-			Fsm script = GetFsm(name);
-			if(script==null)
-			{
-				Debug.Log("FSM SCRIPT NOT FOUND " + name);
-				if(onComplete!=null)
-					onComplete(null);
-				
-				return;
-			}
-			if(script.ActiveStateName.StartsWith("IDLE") || script.ActiveStateName.StartsWith("END"))
-			{
-				//Debug.Log("RUN SCRIPT FSM " + name);
-				RunningScript runningScript = GetRunningScriptFromPool();
-				runningScript.fsmScript = script;
-				runningScript.OnComplete = onComplete;
-				runningScript.OnFailed = onFailed;
-				runningScript.scriptType = (int)RunningScript.ScriptTypes.Playmaker;
 
-
-				runningScripts.Add(runningScript);
-				
-				FsmObject scriptEngineVar =  script.GetFsmObject("ScriptEngine");
-				scriptEngineVar.Value = this;
-				
-				script.Event("RUN");
-				return;
-			}
-			else
-			{
-				//Debug.Log("RUN SCRIPT FSM " + name + " NOT IDLE ");
-
-			}
-			
-			if(onComplete!=null)
-				onComplete(null);
-				
-		}
-	*/
-		//MotinScript tmpMotinScript = null;
-
-		public void runScript(MotinData[] scriptData,MotinScript.MotinScriptDelegate onComplete = null,MotinScript.MotinScriptDelegate onFailed = null)
+		public void runScript(MotinData[] scriptData,Hashtable contextData = null,System.Action<MotinScript> OnFinished = null)
 		{
 			ScriptSequenceData secuenceData = new ScriptSequenceData();
 			secuenceData.childDatas = new List<MotinData>(scriptData);
-			runScript(secuenceData,onComplete,onFailed);
+			runScript(secuenceData,contextData,OnFinished);
 		}
 
 
-		public void runScript(MotinData scriptData,MotinScript.MotinScriptDelegate onComplete = null,MotinScript.MotinScriptDelegate onFailed = null )
+		public void runScript(MotinData scriptData,Hashtable contextData = null,System.Action<MotinScript> OnFinished = null )
 		{
 			//tmpMotinScript =null;
 			if(scriptData==null)
 			{
 				//Debug.Log("SCRIPT ENGINE MotinScriptData is NULL" );
-				if(onComplete!=null)
-					onComplete(null);
+				if(OnFinished!=null)
+					OnFinished(null);
 				
 				return;
 			}
 			//Debug.Log("SCRIPT ENGINE RUN SCRIPT " + scriptData.name);
 			MotinScript tmpMotinScript = CreateMotinScriptFromData(scriptData);
-			runScript(tmpMotinScript,onComplete,onFailed);
+			tmpMotinScript.context = contextData;
+			runScript(tmpMotinScript,OnFinished);
 			tmpMotinScript = null;
 		}
 
-		public void runScript(MotinScript motinScript,MotinScript.MotinScriptDelegate onComplete = null,MotinScript.MotinScriptDelegate onFailed = null)
+		public IEnumerator RunScriptCoroutine(MotinData data,Hashtable context = null)
+		{
+			MotinScript scriptBase =(MotinScript)CreateMotinScriptFromData(data);
+			runScript(scriptBase);
+			
+			while(scriptBase.scriptState == SCRIPT_STATE.RUNNING)
+				yield return null;
+
+		}
+
+		public IEnumerator runScriptCoroutine(MotinScript motinScript,System.Action<MotinScript> OnFinished = null)
+		{
+			if(motinScript==null)
+			{
+				Debug.LogError("Run Script MotinScript is null");
+				yield break ;
+			}
+			motinScript.scriptEngine = this;
+			//		Debug.Log("RUN MotinScript  " + motinScript.scriptData.name);
+			RunningScript runningScript = GetRunningScriptFromPool();
+			runningScript.script = motinScript;
+			runningScript.scriptType = (int)RunningScript.ScriptTypes.MotinScript;
+			runningScript.OnFinished = OnFinished;
+			//runningScript.OnFailed = onFailed;
+			
+			//tmpRunningScript = new RunningScript(motinScript,onComplete,onFailed);
+			runningScripts.Add(runningScript);
+			runningScript.script.run();
+
+			while(runningScript.script.scriptState == SCRIPT_STATE.RUNNING)
+				yield return null;
+
+
+			//Debug.Log("runScriptCoroutine COMPLETE " + motinScript.scriptData.GetType().Name );
+			runningScripts.Remove(runningScript);
+			if(runningScript.OnFinished!=null)
+			{
+				//	Debug.Log("RAISE COMPLETE " + script.scriptData.scriptName + " " + script.scriptData.name);
+				runningScript.OnFinished(runningScript.script);
+				
+			}
+			
+			ReturnRunningScriptToPool(runningScript);
+
+			runningScript = null;
+		}
+
+
+		public void runScript(MotinScript motinScript,System.Action<MotinScript> OnFinished = null)
 		{
 			
 			if(motinScript==null)
@@ -303,20 +248,29 @@ namespace MotinGames
 				return ;
 			}
 
-			motinScript.onScriptCompleted += OnScriptComplete;
-			motinScript.onScriptFailed += OnScriptFailed;
+			motinScript.OnFinishedWithScript += OnScriptFinishedCallback;
+			//motinScript.onScriptFailed += OnScriptFailed;
 			motinScript.scriptEngine = this;
 	//		Debug.Log("RUN MotinScript  " + motinScript.scriptData.name);
 			RunningScript runningScript = GetRunningScriptFromPool();
 			runningScript.script = motinScript;
 			runningScript.scriptType = (int)RunningScript.ScriptTypes.MotinScript;
-			runningScript.OnComplete = onComplete;
-			runningScript.OnFailed = onFailed;
+			runningScript.OnFinished = OnFinished;
+			//runningScript.OnFailed = onFailed;
 
 			//tmpRunningScript = new RunningScript(motinScript,onComplete,onFailed);
 			runningScripts.Add(runningScript);
 			runningScript.script.run();
 			runningScript = null;
+		}
+
+		public void StopScript(MotinScript script,bool raiseCompleted = true)
+		{
+			if(script==null)
+				return;
+
+			script.ForceStop();
+			//OnScriptFinished(script,raiseCompleted);
 		}
 		
 		void Update()
@@ -324,58 +278,50 @@ namespace MotinGames
 			foreach(RunningScript script in runningScripts)
 			{
 				if(script.scriptType== (int)RunningScript.ScriptTypes.MotinScript)
-					script.script.update(Time.deltaTime);
+					script.script.OnUpdate();
 			}
 		}
-		
-		void OnScriptComplete(MotinScript script)
+
+		void FixedUpdate()
 		{
-		
-	//		Debug.Log("SCRIPTENGINE COMPLETE " + script.scriptData.scriptName + " " + script.scriptData.name);
+			foreach(RunningScript script in runningScripts)
+			{
+				if(script.scriptType== (int)RunningScript.ScriptTypes.MotinScript)
+					script.script.OnLateUpdate();
+			}
+		}
+
+		void LateUpdate()
+		{
+			foreach(RunningScript script in runningScripts)
+			{
+				if(script.scriptType== (int)RunningScript.ScriptTypes.MotinScript)
+					script.script.OnFixedUpdate();
+			}
+		}
+
+		void OnScriptFinishedCallback(MotinScript script,bool raiseCompleted = true)
+		{
+			OnScriptFinished(script);
+		}
+
+		void OnScriptFinished(MotinScript script,bool raiseCompleted = true)
+		{
+			//Debug.Log("SCRIPTENGINE COMPLETE " + script.scriptData.GetType().Name );
 			int index = getRunningScriptIndex(script);
-			script.onScriptCompleted -= OnScriptComplete;
-			script.onScriptFailed -= OnScriptFailed;
+			script.OnFinishedWithScript -= OnScriptFinishedCallback;
+
 			RunningScript runningScript = 	runningScripts[index];
 			runningScripts.RemoveAt(index);
-			if(runningScript.OnComplete!=null)
+			if(runningScript.OnFinished!=null & raiseCompleted)
 			{
-			//	Debug.Log("RAISE COMPLETE " + script.scriptData.scriptName + " " + script.scriptData.name);
-				runningScript.OnComplete(script);
-
+				//	Debug.Log("RAISE COMPLETE " + script.scriptData.scriptName + " " + script.scriptData.name);
+				runningScript.OnFinished(script);
+				
 			}
-
+			
 			ReturnRunningScriptToPool(runningScript);
 		}
-		
-		void OnScriptFailed(MotinScript script)
-		{
-		//	Debug.Log("SCRIPTENGINE OnScriptFailed " + script.scriptData.name);
-			script.onScriptCompleted -= OnScriptComplete;
-			script.onScriptFailed -= OnScriptFailed;
-			int index = getRunningScriptIndex(script);
-			RunningScript runningScript = 	runningScripts[index];
-			runningScripts.RemoveAt(index);
-			if(runningScript.OnFailed!=null)
-			{
-				runningScript.OnFailed(script);
-			}
 
-			ReturnRunningScriptToPool(runningScript);
-		}
-		
-		/*
-		public void OnFsmScriptComplete(Fsm script)
-		{
-			int index = getRunningScriptIndex(script);
-			RunningScript runningScript = 	runningScripts[index];
-			runningScripts.RemoveAt(index);
-			if(runningScript.OnComplete!=null)
-			{
-				//Debug.Log("RAISE COMPLETE " + script.scriptData.scriptName + " " + script.scriptData.name);
-				runningScript.OnComplete(null);
-			}
-			ReturnRunningScriptToPool(runningScript);
-		}
-		*/
 	}
 }

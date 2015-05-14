@@ -9,9 +9,12 @@ using Holoville.HOTween;
 
 namespace MotinGames
 {
+
 	namespace SoundManagerData
 	{
 		[System.Serializable]
+		[MotinEditorClassHideFields("intUniqueId","uniqueId","SoundId")]
+		[MotinEditorClassReadonlyFields("name")]
 		public class SoundProperties : MotinData
 		{
 			[MotinEditorSoundEnumField]

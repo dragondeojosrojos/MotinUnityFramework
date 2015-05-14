@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<DOCUMENT_ROOT>
+  <MotinGames.ControlSetupData intUniqueId="742728951" uniqueId="88798196384713291844643672" name="Desktop" platform="ALL" isDefault="False" controlPrefix="">
+    <MotinDataArray name="inputBindings" count="1">
+      <MotinGames.InputActionBindingData intUniqueId="1375729758" uniqueId="19635402979566609411552545334" name="DEMO_ACTION" gameActionId="DEMO_ACTION" inputName="Action" />
+    </MotinDataArray>
+  </MotinGames.ControlSetupData>
+</DOCUMENT_ROOT>

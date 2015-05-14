@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using MotinGames;
 public class MotinEditorUtils {
 	
 	public static System.Random randomGenerator = null;
@@ -662,15 +663,32 @@ public class MotinEditorUtils {
 	}
 	*/
 
-
+	public static void WriteDefinesFile(string enumName,string Namespace,string filePath,List<MotinData> dataList)
+	{
+		Dictionary<string,int> definesDict  = new Dictionary<string, int>();
+		for (int i = 0 ; i < dataList.Count;i++)
+		{
+			definesDict.Add(dataList[i].name,dataList[i].intUniqueId);
+		}
+		WriteDefinesFile( enumName, Namespace, filePath, definesDict);
+	}
 	public static void WriteDefinesFile(string enumName,string Namespace,string filePath,List<string> defineNames)
 	{
+		Dictionary<string,int> definesDict  = new Dictionary<string, int>();
+		for (int i = 0 ; i < defineNames.Count;i++)
+		{
+			definesDict.Add(defineNames[i],i);
+		}
+		WriteDefinesFile( enumName, Namespace, filePath, definesDict);
+	}
+	public static void WriteDefinesFile(string enumName,string Namespace,string filePath,Dictionary<string,int> definesDict)
+	{
 		List<string> textLines = new List<string>();
-
+		
 		WriteHeader(textLines,Namespace);
-		WriteDefines(textLines,enumName,defineNames);
+		WriteDefines(textLines,enumName,definesDict);
 		WriteFooter(textLines,Namespace);
-
+		
 		System.IO.File.WriteAllLines(Application.dataPath + filePath /* "/MotinGames/SoundManager/SoundDefinitions.cs"*/, textLines.ToArray());
 		
 		AssetDatabase.Refresh();
@@ -684,17 +702,18 @@ public class MotinEditorUtils {
 
 		
 	}
-	protected static void WriteDefines(List<string> textLines,string enumName,List<string> defineNames)
+	protected static void WriteDefines(List<string> textLines,string enumName,Dictionary<string,int> definesDict)
 	{
 		textLines.Add ("	public enum " + enumName);
 		textLines.Add ("	{");
 		
 
-		for(int i =0 ;i < defineNames.Count;i++)
+		foreach(KeyValuePair<string,int> kv in definesDict)
 		{
-			textLines.Add("		" + defineNames[i] + "=" + i.ToString() + ",");
+			textLines.Add("		" + kv.Key + "=" + kv.Value.ToString() + ",");
 		}
-		textLines.Add("		COUNT=" + defineNames.Count.ToString());
+
+		textLines.Add("		COUNT=" + definesDict.Count.ToString());
 		textLines.Add ("	}");
 	}
 

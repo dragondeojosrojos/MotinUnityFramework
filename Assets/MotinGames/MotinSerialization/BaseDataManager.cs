@@ -10,13 +10,15 @@ namespace MotinGames
 		
 		protected List<K> dataList = new List<K>();
 		protected List<string> namesListlookup = new List<string>(); 
+		protected string currentFilePath ="";
 		protected virtual void Awake()
 		{
 
 		}
 		protected void Initialize(string filePath)
 		{
-			dataList = new List<K>( MotinDataManager.Load<K>(filePath));
+			currentFilePath = filePath;
+			dataList = new List<K>( MotinDataManager.Load<K>(currentFilePath));
 
 			namesListlookup = new List<string>();
 			
@@ -25,7 +27,45 @@ namespace MotinGames
 				namesListlookup.Add( dataList[i].name);
 			}
 		}
-		
+
+		public void Save()
+		{
+			MotinDataManager.Save(currentFilePath,dataList.ToArray());
+		}
+
+		public void AddData(K data,bool replaceById = true)
+		{
+			int dataIndex = -1;
+
+			if(replaceById)
+				dataIndex = GetIndexById(data.intUniqueId);
+
+			if(dataIndex>=0)
+				dataList[dataIndex] = data;
+			else
+				dataList.Add(data);
+		}
+
+		public int GetIndexById(int dataId)
+		{
+			for(int i = 0 ; i < dataList.Count;i++)
+			{
+				if(dataList[i].intUniqueId == dataId)
+					return i;
+			}
+			
+			return -1;
+		}
+		public K GetById(int dataId)
+		{
+			foreach(K data in dataList)
+			{
+				if(data.intUniqueId == dataId)
+					return data;
+			}
+			
+			return null;
+		}
 		public K GetByName(string dataName)
 		{
 				foreach(K data in dataList)
@@ -35,6 +75,16 @@ namespace MotinGames
 			}
 			
 			return null;
+		}
+		public int GetIdByName(string dataName)
+		{
+			foreach(K data in dataList)
+			{
+				if(data.name == dataName)
+					return data.intUniqueId;
+			}
+			
+			return -1;
 		}
 
 		public K[] GetDataArray()
@@ -48,7 +98,6 @@ namespace MotinGames
 		}
 		public List<string> GetNamesList()
 		{
-
 			return new List<string>(namesListlookup) ;
 		}
 	}

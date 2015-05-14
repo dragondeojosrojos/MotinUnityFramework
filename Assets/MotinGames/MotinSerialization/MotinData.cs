@@ -12,6 +12,9 @@ namespace MotinGames
 		[MotinEditorReadonlyField]
 		public string uniqueId ="";
 
+		[MotinEditorReadonlyField]
+		public int intUniqueId =0;
+
 		public MotinData()
 		{
 			SetDefaultValues();
@@ -26,12 +29,16 @@ namespace MotinGames
 		public virtual void SetDefaultValues()
 		{
 			uniqueId = MotinUtils.GetUniqueString();
+			intUniqueId = MotinUtils.GetUniqueInteger();
 		}
 
 		public virtual void OnFinishedDeserializing()
 		{
 			if(string.IsNullOrEmpty(uniqueId))
 				uniqueId = MotinUtils.GetUniqueString();
+
+			if(intUniqueId ==0)
+				intUniqueId = MotinUtils.GetUniqueInteger();
 		}
 		public virtual void OnWillSerialize()
 		{

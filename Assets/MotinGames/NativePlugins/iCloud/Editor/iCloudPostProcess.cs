@@ -14,7 +14,11 @@ namespace UnityEditor.MotinNativePlugins
 			Debug.Log ("POstProcess iCloud");
 
 
-            if (target == BuildTarget.iPhone)
+           #if UNITY_5
+            if (target == BuildTarget.iOS)
+#else
+			if (target == BuildTarget.iPhone)
+#endif
             {
                 UnityEditor.XCodeEditor.XCProject project = new UnityEditor.XCodeEditor.XCProject(path);
 

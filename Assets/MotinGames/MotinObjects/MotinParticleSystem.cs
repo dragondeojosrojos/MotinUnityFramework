@@ -47,6 +47,8 @@ public class MotinParticleSystem : MotinBaseObject {
 		}
 		if(callback!=null)
 			callback(gameObject);
+
+		this.Unspawn();
 	}
 
 	public IEnumerator PlayCoroutine()

@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495bcd202894549d482df64c7986eb52, type: 3}
   m_Name: am_options
   m_EditorClassIdentifier: 
-  skin: am_skin_dark
+  skin: am_skin_blue
   time_numbering: 0
   scrubby_zoom_cursor: 1
   scrubby_zoom_slider: 0

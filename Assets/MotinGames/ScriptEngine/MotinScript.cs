@@ -10,6 +10,7 @@ namespace MotinGames
 		RUNNING,
 		COMPLETED,
 		FAILED,
+		CANCELLED,
 		
 	}
 
@@ -17,12 +18,61 @@ namespace MotinGames
 	{
 		public SCRIPT_STATE scriptState	= SCRIPT_STATE.IDLE;
 
-		public delegate void MotinScriptDelegate(MotinScript motinScript);
-		public MotinScriptDelegate	onScriptCompleted = null;
-		public MotinScriptDelegate	onScriptFailed = null;
-		
+		public System.Action				OnFinished = null;
+		public System.Action<MotinScript>	OnFinishedWithScript = null;
+
+		public void RaiseFinished(bool succeded = true)
+		{
+			if(succeded)
+				scriptState = SCRIPT_STATE.COMPLETED;
+			else
+				scriptState = SCRIPT_STATE.FAILED;
+
+			OnEnded();
+
+			if(OnFinished!=null)
+			{
+				OnFinished();
+			}
+
+			if(OnFinishedWithScript!=null)
+			{
+				OnFinishedWithScript(this);
+			}
+		}
+		//public System.Action<MotinScript>	onScriptFailed = null;
+
+
+
 		public MotinScriptEngine 		scriptEngine = null;
-		public MotinData				scriptData = null;
+
+		private Hashtable				_context = null;
+		public Hashtable				context
+		{
+			get{return _context;}
+			set{
+				_context = value;
+				parseContextData(_context);
+			}
+		}
+
+
+
+		private MotinData				_scriptData = null;
+		public MotinData				scriptData
+		{
+			get{return _scriptData;}
+			set{
+				_scriptData = value;
+				parseScriptData(scriptData);
+			}
+		}
+
+		public int uniqueId
+		{
+			get;
+			protected set;
+		}
 		
 			/*
 		public static   MotinData CreateData()
@@ -39,22 +89,34 @@ namespace MotinGames
 		}
 		public MotinScript()
 		{
-			
+			uniqueId = MotinUtils.GetUniqueInteger();
 		}
 		public MotinScript(MotinScriptEngine scriptEngine ,MotinData data)
 		{
+			uniqueId = MotinUtils.GetUniqueInteger();
 			this.scriptEngine = scriptEngine;
-			SetData(data);
+			scriptData = data;
 		}
+		/*
 		public void SetData(MotinData data)
 		{
 			scriptData = data;
 			parseScriptData(scriptData);
 		}
-		public virtual void parseScriptData(MotinData data)
+		*/
+		protected virtual void parseScriptData(MotinData data)
 		{
 			
 		}
+		protected virtual void parseContextData(Hashtable data)
+		{
+			
+		}
+		public bool isCancelled()
+		{
+			return scriptState == SCRIPT_STATE.CANCELLED;
+		}
+
 		/*
 		public virtual void Clear()
 		{
@@ -67,24 +129,50 @@ namespace MotinGames
 		public void run()
 		{
 			scriptState = SCRIPT_STATE.RUNNING;
-			DoAction();
+			OnStart();
+		}
+		public void ForceStop()
+		{
+			scriptState = SCRIPT_STATE.CANCELLED;
+			OnWillForceStop();
 		}
 
-		protected virtual void DoAction()
+		protected virtual void OnStart()
 		{
-			Debug.LogError("MOTIN SCRIPT DoAction NOT IMPLEMENTED");
+			Debug.LogError("MOTIN SCRIPT OnEnter NOT IMPLEMENTED");
 			//raiseOnScriptCompleted();
 		}
-		public virtual void update(float deltaT)
+		public virtual void OnUpdate()
 		{
 			
 		}
+		public virtual void OnFixedUpdate()
+		{
+			
+		}
+
+		public virtual void OnLateUpdate()
+		{
+			
+		}
+
+		protected virtual void OnEnded()
+		{
+			
+		}
+
+		protected virtual void OnWillForceStop()
+		{
+			RaiseFinished(false);
+		}
+		/*
 		public virtual void step()
 		{
 			
 		}
+		*/
 
-	
+	/*
 		public void raiseOnScriptCompleted()
 		{
 			scriptState = SCRIPT_STATE.COMPLETED;
@@ -101,6 +189,7 @@ namespace MotinGames
 				onScriptFailed(this);
 			}
 		}
+		*/
 		
 	}
 }

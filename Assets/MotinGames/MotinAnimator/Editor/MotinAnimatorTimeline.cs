@@ -760,8 +760,8 @@ public class MotinAnimatorTimeline : EditorWindow {
 			cursorHand = false;
 			cursorZoom = false;
 		}
-		if(Screen.showCursor != showCursor) {
-			Screen.showCursor = showCursor;
+		if(Cursor.visible != showCursor) {
+			Cursor.visible = showCursor;
 		}
 		if(isRenamingTake || isRenamingTrack != -1 || isRenamingGroup < 0) EditorGUIUtility.AddCursorRect(rectWindow,MouseCursor.Text);
 		else if(dragType == (int)DragType.TimeScrub || dragType == (int)DragType.FrameScrub || dragType == (int)DragType.MoveSelection) EditorGUIUtility.AddCursorRect(rectWindow,MouseCursor.SlideArrow);
@@ -3216,9 +3216,15 @@ public class MotinAnimatorTimeline : EditorWindow {
 			else if(t == typeof(MeshCollider)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(MeshCollider),true))) saveChanges = true; }
 			else if(t == typeof(WheelCollider)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(WheelCollider),true))) saveChanges = true; }
 			else if(t == typeof(TerrainCollider)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(TerrainCollider),true))) saveChanges = true; }
+#if UNITY_5
+
+#else
+
 			else if(t == typeof(InteractiveCloth)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(InteractiveCloth),true))) saveChanges = true; }
+
 			else if(t == typeof(SkinnedCloth)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(SkinnedCloth),true))) saveChanges = true; }
 			else if(t == typeof(ClothRenderer)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(ClothRenderer),true))) saveChanges = true; }
+			#endif
 			else if(t == typeof(HingeJoint)){ if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(HingeJoint),true))) saveChanges = true; }
 			else if(t == typeof(FixedJoint)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(FixedJoint),true))) saveChanges = true; }
 			else if(t == typeof(SpringJoint)) { if(parameter.setObject(EditorGUI.ObjectField(rectObjectField,parameter.val_obj,typeof(SpringJoint),true))) saveChanges = true; }
@@ -3316,7 +3322,7 @@ public class MotinAnimatorTimeline : EditorWindow {
 			if((amTrack as AMAnimationTrack).setObject((GameObject)EditorGUI.ObjectField(rect,(amTrack as AMAnimationTrack).obj,typeof(GameObject),true))) {
 				//Animation _temp = (Animation)(amTrack as AMAnimationTrack).obj.GetComponent("Animation");
 				if((amTrack as AMAnimationTrack).obj != null) {
-					if((amTrack as AMAnimationTrack).obj.animation == null) {
+					if((amTrack as AMAnimationTrack).obj.GetComponent<Animation>() == null) {
 						(amTrack as AMAnimationTrack).obj = null;
 						EditorUtility.DisplayDialog("No Animation Component","You must add an Animation component to the GameObject before you can use it in an Animation Track.","Okay");
 					}
@@ -3395,6 +3401,31 @@ public class MotinAnimatorTimeline : EditorWindow {
 		GUI.skin = skin;
 		EditorGUIUtility.LookLikeControls();
 	}
+
+	 /*
+
+	bool dataWillBeLost(AMPropertyTrack amTrack , GameObject newObject)
+	{
+		if(amTrack.keys.Count > 0)
+		{
+			if(((AMPropertyTrack)amTrack.keys[0]).component==null)
+				return false;
+
+			Type componentTyoe =((AMPropertyTrack)amTrack.component.GetType(); 
+			Component newComponent = newObject.GetComponent< componentTyoe>();
+			if(newComponent==null)
+				return true;
+
+			((AMPropertyTrack)amTrack.keys[0]).setObject(newObject);
+			for(int i=0;i<amTrack.keys.Count;i++) {
+
+			}
+		}
+
+
+		return false;
+	}
+*/
 	void showAlertMissingObjectType(string type) {
 		EditorUtility.DisplayDialog("Missing "+type,"You must add a "+type+" to the track before you can add keys.","Okay");
 	}
@@ -4524,7 +4555,7 @@ public class MotinAnimatorTimeline : EditorWindow {
 				return;
 			}
 			// add key to animation track
-			(amTrack as AMAnimationTrack).addKey (_frame,(amTrack as AMAnimationTrack).obj.animation.clip,WrapMode.Once);
+			(amTrack as AMAnimationTrack).addKey (_frame,(amTrack as AMAnimationTrack).obj.GetComponent<Animation>().clip,WrapMode.Once);
 		} else if(amTrack is AMAudioTrack) {
 			// audio
 			

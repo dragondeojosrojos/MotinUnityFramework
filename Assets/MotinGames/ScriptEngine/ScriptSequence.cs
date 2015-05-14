@@ -23,40 +23,49 @@ namespace MotinGames
 		{
 			
 		}
-		public override void parseScriptData(MotinData data)
+		protected override void parseScriptData(MotinData data)
 		{
 			arrayData =(ScriptSequenceData)data ;
 
 		}
 
-		protected override void DoAction ()
+		protected override void OnStart ()
 		{
 			Debug.Log("RUN SECUENCES " + scriptData.name);
 			currentScript = 0;
 			if(currentScript == arrayData.childDatas.Count)
 			{
 				Debug.Log("Secuence completed " + arrayData.childDatas.Count);
-				raiseOnScriptCompleted();
+				RaiseFinished();
 				return;
 			}
-			scriptEngine.runScript(arrayData.childDatas[currentScript],this.OnScriptCompleted,this.OnScriptFailed);
+			scriptEngine.runScript(arrayData.childDatas[currentScript],context,this.OnScriptFinished);
 		}
 		
-		public void OnScriptCompleted(MotinScript script)
+		public void OnScriptFinished(MotinScript script)
 		{
 		//	Debug.Log("Secuence script completed SECUENCES " + script.scriptData.name);
+
+			if(script.scriptState == SCRIPT_STATE.FAILED)
+			{
+				RaiseFinished(false);
+				return;
+			}
+
 			currentScript++;
 			if(currentScript == arrayData.childDatas.Count)
 			{
 			//	Debug.Log("Secuence completed " + arrayData.childDatas.Count);
-				raiseOnScriptCompleted();
+				RaiseFinished();
 				return;
 			}
-			scriptEngine.runScript(arrayData.childDatas[ currentScript],this.OnScriptCompleted,this.OnScriptFailed);
+			scriptEngine.runScript(arrayData.childDatas[ currentScript],context,this.OnScriptFinished);
 		}
+		/*
 		public void OnScriptFailed(MotinScript script)
 		{
 			raiseOnScriptFailed();
 		}
+		*/
 	}
 }

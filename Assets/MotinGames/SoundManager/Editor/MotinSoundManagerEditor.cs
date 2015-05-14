@@ -9,25 +9,31 @@ public class MotinSoundManagerEditor : MotinEditor {
 
 
 	MotinSoundManager soundManager = null;
-	MotinArrayListEditor	listEditor = null;
+	//MotinArrayBaseEditor	listEditor = null;
 
+	/*
 	protected override void Initialize ()
 	{
 		base.Initialize ();
-		listEditor = new MotinArrayListEditor("MotinGames.SoundManagerData");
-		listEditor.OnDataChanged+= OnSoundPropsEditorChanged;
+		listEditor = new MotinArrayBaseEditor(hostEditorWindow,typeof(MotinGames.SoundManagerData.SoundProperties));
+		listEditor.OnFieldValueChanged+= OnSoundPropsEditorChanged;
 
 	}
-	void OnSoundPropsEditorChanged()
+	*/
+	/*
+	void OnSoundPropsEditorChanged(object instance,System.Reflection.FieldInfo field)
 	{
 		soundManager.soundProps = listEditor.objectList.Cast<MotinGames.SoundManagerData.SoundProperties>().ToList();
+		RaiseOnFieldValueChanged(target,null);
 	}
+	*/
 	protected override void targetUpdated ()
 	{
 		base.targetUpdated ();
 		soundManager = (MotinSoundManager)target;
 		soundManager.UpdateSoundProps();
 
+		this.SetDirty();
 	}
 
 	protected override void DoDraw ()
@@ -53,7 +59,7 @@ public class MotinSoundManagerEditor : MotinEditor {
 
 		GUILayout.EndVertical();
 	}
-
+	/*
 	protected override bool DrawField (object value, System.Reflection.FieldInfo field)
 	{
 		if(field.Name=="soundProps")
@@ -65,6 +71,7 @@ public class MotinSoundManagerEditor : MotinEditor {
 
 		return base.DrawField (value, field);
 	}
+	*/
 
 		   List<string> textLines = new List<string>();
 		   List<string> defineNames = new List<string>();

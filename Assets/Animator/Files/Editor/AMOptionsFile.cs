@@ -8,7 +8,7 @@ using System.IO;
 public class AMOptionsFile : ScriptableObject {
 	
 	// options
-	public string skin = "am_skin_dark";
+	public string skin = "am_skin_blue";
 	public bool time_numbering = false;
 	public bool scrubby_zoom_cursor = true;
 	public bool scrubby_zoom_slider = false;

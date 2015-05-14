@@ -30,12 +30,15 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 		base.objectListUpdated ();
 
 	}
+	
 
-	protected override MotinEditor CreateInitializedEditor (System.Type dataType, object target, int index = -1)
+	protected override MotinEditor CreateInitializedEditor (MotinEditor newEditor, object editorTarget, int index)
 	{
-		MotinDataEditor newEditor = (MotinDataEditor) base.CreateInitializedEditor (dataType, target,index);
-		newEditor.OnDataNameChanged += DataNameChanged;
-		return newEditor;
+		MotinDataEditor editor = (MotinDataEditor) base.CreateInitializedEditor (newEditor, editorTarget, index);
+		if(editor == null)
+			return null;
+		editor.OnDataNameChangedWithEditor += DataNameChanged;
+		return editor;
 	}
 
 	public MotinArrayListEditor( ):base()
@@ -247,7 +250,7 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 	{
 		
 		GUILayout.BeginVertical(MotinEditorSkin.SC_ListBoxBG, GUILayout.Width(leftBarWidth), GUILayout.ExpandHeight(true));
-		listScroll = GUILayout.BeginScrollView(listScroll, GUILayout.Width(leftBarWidth));
+		listScroll = GUILayout.BeginScrollView(listScroll, GUILayout.Width(leftBarWidth),GUILayout.ExpandHeight(true));
 		foreach (object data in filteredObjects)
 		{
 			tmpListData = (MotinData)data;
@@ -285,16 +288,23 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 	protected virtual void DoDrawEditor()
 	{
 		
-		listScrollEditor = GUILayout.BeginScrollView(listScrollEditor,GUILayout.ExpandWidth(true) , GUILayout.ExpandHeight(true));
+		
 		if(selectedObject!=null)
 		{ 
-				motinEditors_[selectedObjectIndex].Draw(new Rect(0,0,editorRect.width,editorRect.height) ,childEditorsExpandHeight );
+				listScrollEditor = GUILayout.BeginScrollView(listScrollEditor,false,true,GUILayout.ExpandWidth(true) , GUILayout.ExpandHeight(true));
+				motinEditors_[selectedObjectIndex].Draw(new Rect(0,0,editorRect.width,motinEditors_[selectedObjectIndex].editorContentRect.height) ,false );
+				GUILayout.EndScrollView();
 			//DrawItem(selectedObjectIndex);
 			//			Debug.Log(" DRAW EDITOR " + selectedData.name);
 			//dataEditor.target = selectedData;
 			//dataEditor.Draw(new Rect(0,0,editorRect.width,editorRect.height)  );
 		}  
-		GUILayout.EndScrollView();
+		else
+		{
+				listScrollEditor = GUILayout.BeginScrollView(listScrollEditor,GUILayout.ExpandWidth(true) , GUILayout.ExpandHeight(true));
+				GUILayout.EndScrollView();
+		}
+		
 		
 	}
 

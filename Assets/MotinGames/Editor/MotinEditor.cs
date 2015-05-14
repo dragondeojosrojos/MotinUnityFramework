@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 namespace MotinGames
 {
 
@@ -17,20 +17,34 @@ namespace MotinGames
 		public System.Action<MotinEditor>	OnDeletePressed;
 		public System.Action<MotinEditor> 	OnUpPressed;
 		public System.Action<MotinEditor> 	OnDownPressed;
-		public System.Action				OnDataChanged;
-		public System.Action<MotinEditor>	OnDataChangedEditor;
+		public System.Action				OnEditorChanged;
+		public System.Action<MotinEditor>	OnEditorChangedWithEditor;
+		//public System.Action	OnFieldValueChanged = null;
+		public System.Action<object,System.Reflection.FieldInfo>	OnFieldValueChanged = null;
 		
 
 		protected virtual void RaiseOnDeletePressed() { if (OnDeletePressed != null) OnDeletePressed(this); }
 		protected virtual void RaiseOnUpPressed() { if (OnUpPressed != null) OnUpPressed(this); }
 		protected virtual void RaiseOnDownPressed() { if (OnDownPressed != null) OnDownPressed(this); }
-		protected virtual void RaiseOnDataChanged() { if (OnDataChanged != null) OnDataChanged(); if (OnDataChangedEditor!= null) OnDataChangedEditor(this); }
+		protected virtual void RaiseOnFieldValueChanged(object instance,System.Reflection.FieldInfo field) { SetDirty();FieldValueChanged(instance,field); if (OnFieldValueChanged != null) OnFieldValueChanged(instance,field); }
+		protected virtual void RaiseOnEditorChanged() { if (OnEditorChanged != null) OnEditorChanged(); if (OnEditorChangedWithEditor!= null) OnEditorChangedWithEditor(this); }
+		//protected virtual void RaiseOnDataChanged() { if (OnDataChanged != null) OnDataChanged(); if (OnDataChangedEditor!= null) OnDataChangedEditor(this); }
 
 		public bool drawDefaultEditor = false;
 
 		public bool foldOpen = true;
 		public Color editorColor = Color.white;
+		public Color GetColor()
+		{
+			if(editorColor== Color.white && parentEditor!=null)
+				return parentEditor.GetColor();
+
+			return editorColor;
+		}
 		public bool showListToolbar = false;
+
+		public Rect		editorContentRect = new Rect(0,0,0,0);
+
 		protected Rect editorRect = new Rect(0,0,0,0);
 		// Locals
 		//int editorWidth_ = 150;
@@ -38,14 +52,21 @@ namespace MotinGames
 		
 		//int minInspectorWidth = 200;
 		//int minInspectorHeight = 200;
+		public string 	editorFieldName = "";
+		protected  List<MotinEditor> 	motinEditors_ = new List<MotinEditor>();
+
 		public string  	editorName = "Default Editor";
 		public float 	editorWidth { get { return editorRect.width; } set { editorRect.width =value;/* Mathf.Max(value, minInspectorWidth); */} }
 		public float 	editorHeight { get { return editorRect.height; } set { editorRect.height =value;/* Mathf.Max(value, minInspectorHeight);*/ } }
 		
 		public EditorWindow hostEditorWindow = null;
+		public MotinEditor 	parentEditor = null;
 
+		protected	List<string>		readOnlyFieldsList = new List<string>();
+		protected	List<string>		hideFieldsList = new List<string>();
 
 		protected Dictionary<string,string[]> popupNamesLookup = new Dictionary<string, string[]>();
+		protected Dictionary<string,int[]> 	  dataIntIdsLookup = new Dictionary<string, int[]>();
 		bool	targetSetFirstTime =true;
 
 		[SerializeField]
@@ -57,9 +78,10 @@ namespace MotinGames
 				if(value!=target_ || targetSetFirstTime)
 				{
 					popupNamesLookup.Clear();
-
+					dataIntIdsLookup.Clear();
 					targetSetFirstTime = false;
 					target_ = value;
+					UpdateEditorClassSettings();
 					targetUpdated();
 				}
 				
@@ -71,18 +93,234 @@ namespace MotinGames
 			targetUpdated();
 		}
 
+
+		protected bool	isDirty = false;
+		public void SetDirty()
+		{
+			isDirty = true;
+		}
+
 		protected virtual void targetUpdated()
 		{
 	//		Debug.Log ("TARGET UPDATED " + target.GetType().ToString());
-			//editorName ="["+ target.GetType().ToString() + "] " + target_.ToString();
+			editorName =editorFieldName ;
+			if(target!=null)
+					editorName += "["+ target.GetType().ToString() + "] "+ target_.ToString();
 		}
-		public MotinEditor( )	
+
+
+
+		void UpdateEditorClassSettings()
 		{
+			readOnlyFieldsList.Clear();
+			hideFieldsList.Clear();
+
+			if(target_ == null)
+				return;
+
+			object[] decorators =  target_.GetType().GetCustomAttributes(typeof(MotinEditorClassReadonlyFields),true);
+
+			MotinEditorClassReadonlyFields readOnlyDecorator = null;
+
+			foreach(object objDecorator in decorators)
+			{
+				readOnlyDecorator = (MotinEditorClassReadonlyFields)objDecorator;
+				foreach(string fieldName in readOnlyDecorator.readonlyFields)
+				{
+					if(readOnlyFieldsList.Contains(fieldName))
+						continue;
+
+					readOnlyFieldsList.Add(fieldName);
+				}
+			}
+
+			decorators =  target_.GetType().GetCustomAttributes(typeof(MotinEditorClassHideFields),true);
+			MotinEditorClassHideFields hideDecorator = null;
+			
+			foreach(object objDecorator in decorators)
+			{
+				hideDecorator = (MotinEditorClassHideFields)objDecorator;
+				foreach(string fieldName in hideDecorator.hideFields)
+				{
+					if(hideFieldsList.Contains(fieldName))
+						continue;
+					
+					hideFieldsList.Add(fieldName);
+				}
+			}
+
+		
+
+		}
+
+		// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+		//SUB EDITORS HANDLING
+		protected int GetEditorIndex ( object targetObject)
+		{
+			for(int i = 0 ; i < motinEditors_.Count; i ++)
+			{
+				if(motinEditors_[i].target == targetObject)
+					return i;
+			}
+			return -1;
+		}
+
+		private MotinEditor CreateInitializedEditor(System.Reflection.FieldInfo newEditorField ,object fieldObject,int index = -1)
+		{
+			MotinEditor editor = CreateInitializedEditor(newEditorField.FieldType,fieldObject,index);
+			if(editor == null)
+				return null;
+
+			editor.editorFieldName = newEditorField.Name;
+			object[] foundAttrs = newEditorField.GetCustomAttributes(typeof(MotinEditorFieldSettings),false);
+			MotinEditorFieldSettings editorFieldSettings = null;
+			if(foundAttrs!=null && foundAttrs.Length>0)
+			{
+				editorFieldSettings = (MotinEditorFieldSettings)newEditorField.GetCustomAttributes(typeof(MotinEditorFieldSettings),false)[0];
+			}
+
+			if(editorFieldSettings!=null)
+			{
+				editor.editorColor = editorFieldSettings.editorColor;
+				editor.editorName = editorFieldSettings.editorName ;
+			}
+
+			if(newEditorField.FieldType.IsGenericType && newEditorField.FieldType.GetGenericTypeDefinition() == typeof(List<>) )
+				SetArrayEditorTypesAndNamespaces(newEditorField,(MotinArrayBaseEditor)editor);
+
+			return editor;
+		}
+
+
+		protected virtual MotinEditor CreateInitializedEditor(Type dataType,object target,int index = -1)
+		{
+			MotinEditor editor = CreateEditor(dataType);
+			return CreateInitializedEditor(editor, target, index );
+		}
+		protected virtual MotinEditor CreateInitializedEditor(MotinEditor editor,object editorTarget,int index = -1)
+		{
+			editor.OnEditorChangedWithEditor+=OnSubEditorChanged;
+			editor.target = editorTarget;
+			editor.editorName = editorTarget.GetType().Name;
+			editor.parentEditor = this;
+			if(index<0)
+				motinEditors_.Add(editor);
+			else
+				motinEditors_.Insert(index,editor);
+			
+			return editor;
+		}
+
+		protected virtual MotinEditor CreateEditor(Type dataType)
+		{
+//			Debug.Log ("CREATE EDITOR DATA TYPE " + dataType.Name);
+			string editorClassSuffix = "";
+			string dataTypeName = "";
+			bool isList = false;
+			if(dataType.IsGenericType && dataType.GetGenericTypeDefinition() == typeof(List<>))
+			{
+				isList = true;
+				editorClassSuffix = "ArrayEditor";
+				dataTypeName = dataType.GetGenericArguments()[0].Name ;
+			}
+			else
+			{
+				dataTypeName = dataType.Name ;
+				editorClassSuffix = "Editor";
+			}
+
+
+			Type editorType = Types.GetType(dataTypeName + editorClassSuffix,"Assembly-CSharp-Editor");
+			MotinEditor editor = null;
+
+			if(editorType!=null)
+			{
+//				Debug.Log("Creating instance for " + editorType.Name);
+				editor = (MotinEditor)System.Activator.CreateInstance(editorType);
+
+				//if(isList)
+				//{
+				//	((MotinArrayBaseEditor)editor).AddType(dataType.GetGenericArguments()[0]);
+				//}
+
+				return editor;
+			}
+		
+
+			if(isList)
+			{
+				return new MotinArrayBaseEditor();
+			}
+			else
+			{
+				if(MotinUtils.IsTypeDerivedFrom(dataType,typeof(MotinData)))
+				{
+					return new MotinDataEditor(hostEditorWindow,null);
+				}
+				return new MotinEditor(hostEditorWindow,null);
+			}
+
+
+			
+		}
+
+		void SetArrayEditorTypesAndNamespaces(System.Reflection.FieldInfo fieldInfo, MotinArrayBaseEditor arrayEditor)
+		{
+			MotinEditorFieldListNamespaces[] 	namespacesAttr 	= (MotinEditorFieldListNamespaces[])fieldInfo.GetCustomAttributes(typeof(MotinEditorFieldListNamespaces),true);
+			MotinEditorFieldListTypes[] 		typesAttr	 	=(MotinEditorFieldListTypes[]) fieldInfo.GetCustomAttributes(typeof(MotinEditorFieldListTypes),true);
+
+			foreach(MotinEditorFieldListNamespaces namespaceAttr in namespacesAttr)
+			{
+				foreach(string namespaceName in namespaceAttr.namespaces)
+				{
+					arrayEditor.AddNamespace(namespaceName);
+				}
+			}
+
+			foreach(MotinEditorFieldListTypes typeAttr in typesAttr)
+			{
+				foreach(Type type in typeAttr.types)
+				{
+					arrayEditor.AddType(type);
+				}
+			}
+
+			if( (namespacesAttr == null || namespacesAttr.Length ==0) && (typesAttr == null || typesAttr.Length ==0) )
+				arrayEditor.AddType(fieldInfo.FieldType.GetGenericArguments()[0]);
+
+			arrayEditor.SetDirty();
+		}
+
+		void OnSubEditorChanged(MotinEditor subEditor)
+		{
+			if(!string.IsNullOrEmpty(subEditor.editorFieldName))
+			{
+				System.Reflection.FieldInfo editorField =  target.GetType().GetField(subEditor.editorFieldName);
+				editorField.SetValue(target,subEditor.target);
+			}
+			SetDirty();
+			//int index = GetEditorIndex(editor.target);
+
+		}
+
+		// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+		// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+
+		public MotinEditor(  )	
+		{
+			parentEditor = null;
 			hostEditorWindow = null;
 			Initialize();
 		}
-		public MotinEditor(EditorWindow hostWindow)
+		public MotinEditor( MotinEditor parent )	
 		{
+			parentEditor = parent;
+			hostEditorWindow = null;
+			Initialize();
+		}
+		public MotinEditor(EditorWindow hostWindow,MotinEditor parent)
+		{
+			parentEditor = parent;
 			hostEditorWindow =hostWindow;
 			Initialize();
 		}
@@ -105,31 +343,32 @@ namespace MotinGames
 					HandleUtility.Repaint();
 				}
 			}
-		
-		/*
-		public virtual void Destroy()
-		{
-			hostEditorWindow =null;
-		}
-		*/
+
+
 		public void Draw(Rect position,bool expand = true)
 		{
 			//if (target==null)
 			//	return;
-			
+			isDirty = false;
 			editorRect = position;
 			//Debug.Log("MOTIN EDITOR  DRAW");
 			//editorWidth = windowWidth;
 			//editorHeight= windowHeight;
 			Color startColor = GUI.color ;
-			GUI.color = editorColor;
+		
+			GUI.color = GetColor();
+
+			GUILayout.BeginHorizontal();
+			if(parentEditor!=null)
+				GUILayout.Space(10);
+
 			if(foldOpen)
 			{
 				
 				//GUI.BeginGroup(editorRect);
 				if(expand)
 				{
-					GUILayout.BeginVertical(GUI.skin.scrollView, GUILayout.ExpandWidth(true),GUILayout.Height(position.height),GUILayout.MinHeight(200));
+					GUILayout.BeginVertical(GUI.skin.scrollView, GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
 					//GUILayout.BeginVertical(GUI.skin.scrollView, GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
 				}
 				else
@@ -137,12 +376,10 @@ namespace MotinGames
 
 				DrawToolbar();
 				//GUI.color = Color.white;
-				GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
+				GUILayout.BeginVertical(MotinEditorSkin.SC_BodyBackground, GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
 				DoDraw();
-
-
-
 				GUILayout.EndVertical();
+				GUILayout.Space(10);
 				GUILayout.EndVertical();
 				
 				
@@ -155,16 +392,23 @@ namespace MotinGames
 				GUILayout.BeginVertical(EditorStyles.toolbar ,  GUILayout.ExpandWidth(true),GUILayout.Height(70));
 				foldOpen = EditorGUILayout.Foldout(foldOpen,editorName);
 			//GUILayout.Label("DEFAULT EDITOR");
+				GUILayout.Space(10);
 				GUILayout.EndVertical();
 				//DrawClosed();
 
 				//GUI.color = Color.white;
 			}
-				
+
+			GUILayout.EndHorizontal();
 			GUI.color = startColor;
+
+
 			
-			if(GUI.changed)
-				RaiseOnDataChanged();
+			if(isDirty)
+				RaiseOnEditorChanged();
+
+			if (Event.current.type == EventType.Repaint )
+				editorContentRect = GUILayoutUtility.GetLastRect();
 			
 		}
 		protected virtual void DrawClosed()
@@ -186,7 +430,7 @@ namespace MotinGames
 			if(target==null)
 				return;
 			
-			GUILayout.BeginVertical();
+			GUILayout.BeginVertical( GUILayout.ExpandWidth(true),GUILayout.ExpandHeight(true));
 			DrawFields();
 			GUILayout.EndVertical();
 		}
@@ -198,7 +442,12 @@ namespace MotinGames
 		protected void  DrawToolbar()
 		{
 			GUILayout.BeginHorizontal(EditorStyles.toolbar,GUILayout.ExpandWidth(true) );
-			foldOpen = EditorGUILayout.Foldout(foldOpen,editorName);
+			bool tmpFold =  EditorGUILayout.Foldout(foldOpen,editorName);
+			if(foldOpen !=tmpFold)
+			{
+				foldOpen = tmpFold;
+				Repaint();
+			}
 			GUILayout.FlexibleSpace();
 			DrawToolbarButtons();
 			if(showListToolbar)
@@ -287,7 +536,7 @@ namespace MotinGames
 			   {
 				  field = fields[i];
 	//				Debug.Log("Draw Field "  + field.Name + " " + field.FieldType.ToString());
-			      if(field.IsPublic && !field.IsStatic && field.GetCustomAttributes(typeof(HideInInspector),false).Length==0)
+			      if(field.IsPublic && !field.IsStatic && field.GetCustomAttributes(typeof(HideInInspector),false).Length==0 && !hideFieldsList.Contains(field.Name))
 			      {
 			        if(!DrawField(value,field))
 					{
@@ -302,8 +551,8 @@ namespace MotinGames
 			   //EditorGUI.indentLevel--;
 			GUILayout.EndVertical();
 			
-			if(changed)
-				RaiseOnDataChanged();
+			//if(changed)
+			//	RaiseOnDataChanged();
 			//GUI.EndGroup();
 		}
 		
@@ -311,11 +560,24 @@ namespace MotinGames
 		{
 			object oldValue =  field.GetValue(value);
 			object newValue = oldValue;
-			if(field.GetCustomAttributes(typeof(MotinEditorReadonlyField),false).Length==0)
+			if(field.GetCustomAttributes(typeof(MotinEditorReadonlyField),false).Length==0 && !readOnlyFieldsList.Contains(field.Name))
 			{
 				if(field.FieldType == typeof(int))
 				{
-					newValue =(object)  EditorGUILayout.IntField(MakeLabel(field), (int) oldValue);
+					if(field.GetCustomAttributes(typeof(MotinEditorMotinDataEnumField),false).Length!=0)
+					{
+
+						int tmpInt = DrawMotinDataEnumIntField(field,(int)oldValue);
+						if(tmpInt != (int)oldValue)
+						{
+							newValue = tmpInt; 
+
+						}
+					}
+					else
+					{
+						newValue =(object)  EditorGUILayout.IntField(MakeLabel(field), (int) oldValue);
+					}
 				} 
 				if(field.FieldType == typeof(bool))
 				{
@@ -337,7 +599,7 @@ namespace MotinGames
 							//AssetDatabase.SaveAssets();
 						}
 					}
-					else if(field.GetCustomAttributes(typeof(MotinEditorStringEnumField),false).Length!=0)
+					else if(field.GetCustomAttributes(typeof(MotinEditorLocalizationEnumField),false).Length!=0)
 					{
 						MotinStrings tmpString = (MotinStrings)EditorGUILayout.EnumPopup(field.Name,MotinUtils.StringToEnum<MotinStrings>((string)oldValue));
 						if(tmpString.ToString() != (string)oldValue)
@@ -362,20 +624,10 @@ namespace MotinGames
 					else if(field.GetCustomAttributes(typeof(MotinEditorMotinDataEnumField),false).Length!=0)
 					{
 
-						/*
-						string[] dataNames = MotinDataManager.GetDataNames(motinDataAttr.filePath);
-						int currentIndex = MotinUtils.StringArrayIndex(dataNames,(string)oldValue);
-						if(currentIndex==-1)
-								currentIndex = dataNames.Length-1;
-
-						string tmpString =dataNames[ EditorGUILayout.Popup(field.Name,currentIndex,dataNames)];
-						*/
 						string tmpString = DrawMotinDataEnumField(field,(string)oldValue);
 						if(tmpString != (string)oldValue)
 						{
 							newValue = tmpString; 
-							//EditorUtility.SetDirty(stringComponent);
-							//AssetDatabase.SaveAssets();
 						}
 					}
 					else
@@ -405,9 +657,34 @@ namespace MotinGames
 				{
 					newValue =(object)  EditorGUILayout.ColorField(field.Name, (Color) oldValue);
 				}
-				else if(field.FieldType.BaseType == typeof(Object))
+				else if(field.FieldType.IsGenericType && field.FieldType.GetGenericTypeDefinition() == typeof(List<>) )
 				{
-					newValue =(object)  EditorGUILayout.ObjectField(field.Name,(Object)oldValue,field.FieldType,true);
+					//Debug.Log("ES UNA LISTA " +field.FieldType.ToString() + " " + field.FieldType.GetGenericArguments()[0].ToString()  );
+					if(MotinUtils.IsTypeDerivedFrom(field.FieldType.GetGenericArguments()[0] ,typeof(MotinData)))
+					{
+						int editorIndex = GetEditorIndex(oldValue);
+						MotinEditor tmpEditor = null;
+						if(editorIndex==-1)
+						{
+
+							tmpEditor = CreateInitializedEditor(field,oldValue);
+
+						}
+						else
+						{
+							tmpEditor = motinEditors_[editorIndex];
+						}
+						tmpEditor.editorFieldName = field.Name;
+						tmpEditor.editorName = field.Name;
+						tmpEditor.target = oldValue;
+						tmpEditor.Draw(tmpEditor.editorContentRect,false);
+						newValue=oldValue;
+					}
+
+				}
+				else if(MotinUtils.IsTypeDerivedFrom(field.FieldType ,typeof(UnityEngine.Object)))
+				{
+					newValue =(object)  EditorGUILayout.ObjectField(field.Name,(UnityEngine.Object)oldValue,field.FieldType,true);
 				}
 				else if(field.FieldType.IsEnum )
 				{
@@ -415,20 +692,43 @@ namespace MotinGames
 				}
 				else if(field.FieldType.IsClass)
 				{
-					newValue=oldValue;
+					if(MotinUtils.IsTypeDerivedFrom(field.FieldType ,typeof(MotinData)))
+					{
+						int editorIndex = GetEditorIndex(oldValue);
+						MotinEditor tmpEditor = null;
+						if(editorIndex==-1)
+						{
+							tmpEditor = CreateInitializedEditor(field,oldValue);
+
+						}
+						else
+						{
+							tmpEditor = motinEditors_[editorIndex];
+						}
+						tmpEditor.editorFieldName = field.Name;
+						tmpEditor.target = oldValue;
+						tmpEditor.editorName = field.Name;
+						tmpEditor.Draw(tmpEditor.editorContentRect,false);
+						newValue=oldValue;
+					}
 				}
 				
 				if(newValue==null && oldValue!=null)
 				{
 					//Debug.Log("DEFAULT CHANGED  "+ field.Name + "  " + newValue.ToString()+ "  " + oldValue.ToString());
 					field.SetValue(value, newValue);
-					FieldValueChanged(value,field);
+					//FieldValueChanged(value,field);
+
+					RaiseOnFieldValueChanged(value,field);
+
 					return true;
 				}
 				else if ( newValue !=null && !newValue.Equals(oldValue))
 				{
 					field.SetValue(value, newValue);
-					FieldValueChanged(value,field);
+					//FieldValueChanged(value,field);
+
+					RaiseOnFieldValueChanged(value,field);
 					return true;
 				}
 				else
@@ -458,6 +758,7 @@ namespace MotinGames
 				MotinEditorMotinDataEnumField motinDataAttr = (MotinEditorMotinDataEnumField)field.GetCustomAttributes(typeof(MotinEditorMotinDataEnumField),false)[0];
 				dataNames = MotinDataManager.GetDataNames(motinDataAttr.filePath);
 				popupNamesLookup.Add(field.Name,dataNames);
+				dataIntIdsLookup.Add(field.Name, MotinDataManager.GetDataIntUniqueIds(motinDataAttr.filePath));
 			}
 
 			int currentIndex = MotinUtils.StringArrayIndex(dataNames,currentValue);
@@ -465,6 +766,26 @@ namespace MotinGames
 				currentIndex = dataNames.Length-1;
 
 			return dataNames[ EditorGUILayout.Popup(field.Name,currentIndex,dataNames)];
+		}
+
+		protected int DrawMotinDataEnumIntField(System.Reflection.FieldInfo field,int intUniqueId)
+		{
+			string[] dataNames  = GetPopupNames(field.Name);
+
+			if(dataNames==null)
+			{
+				MotinEditorMotinDataEnumField motinDataAttr = (MotinEditorMotinDataEnumField)field.GetCustomAttributes(typeof(MotinEditorMotinDataEnumField),false)[0];
+				dataNames = MotinDataManager.GetDataNames(motinDataAttr.filePath);
+				popupNamesLookup.Add(field.Name,dataNames);
+				dataIntIdsLookup.Add(field.Name, MotinDataManager.GetDataIntUniqueIds(motinDataAttr.filePath));
+			}
+			int[] dataIds = GetUniqueIds(field.Name);
+
+			int currentIndex = MotinUtils.IntArrayIndex(dataIds,intUniqueId);
+			if(currentIndex==-1)
+				currentIndex = dataNames.Length-1;
+			
+			return dataIds[ EditorGUILayout.Popup(field.Name,currentIndex,dataNames)];
 		}
 
 		protected string DrawEnumField(string fieldName,System.Type enumerationType,string currentValue)
@@ -475,6 +796,7 @@ namespace MotinGames
 			{
 				dataNames = System.Enum.GetNames(enumerationType);
 				popupNamesLookup.Add(fieldName,dataNames);
+
 			}
 
 			int currentIndex = MotinUtils.StringArrayIndex(dataNames,currentValue);
@@ -509,11 +831,19 @@ namespace MotinGames
 			return false;
 		}
 
+
 		protected virtual void FieldValueChanged(object value,System.Reflection.FieldInfo field) 
 		{
 
 		}
 
+		int[] GetUniqueIds(string key)
+		{
+			if(dataIntIdsLookup.ContainsKey(key))
+				return dataIntIdsLookup[key];
+			
+			return null;
+		}
 		string[] GetPopupNames(string key)
 		{
 			if(popupNamesLookup.ContainsKey(key))

@@ -15,7 +15,7 @@ namespace UnityEditor.MotinNativePlugins
 			Debug.Log ("POstProcess Openkit" + path);
 			
 			
-			if (target == BuildTarget.iPhone)
+			if (target == BuildTarget.iOS)
 			{
 				UnityEditor.XCodeEditor.XCProject project = new UnityEditor.XCodeEditor.XCProject(path);
 				

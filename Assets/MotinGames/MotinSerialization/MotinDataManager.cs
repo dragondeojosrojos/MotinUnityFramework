@@ -176,6 +176,29 @@ namespace MotinGames
 
 		}
 
+		public static int[] GetDataIntUniqueIds(string filePath)
+		{
+			MotinData[] datas = Load(filePath);
+			int[] dataIds = null;
+			if(datas==null)
+			{
+				dataIds = new int[1];
+				dataIds[0] = -1;
+				return dataIds;
+			}
+			
+			dataIds = new int[datas.Length+1];
+			
+			for(int i = 0 ;i < datas.Length;i++)
+			{
+				dataIds[i] = datas[i].intUniqueId;
+			}
+			dataIds[datas.Length] =-1;
+			
+			return dataIds;
+			
+		}
+
 		public static T GetDataByName<T>(string name, string filePath) where T : MotinData
 		{
 			T[] datas = Load<T>(filePath);
@@ -247,8 +270,15 @@ namespace MotinGames
 		#region SERIALIZATION METHODS
 		public static MotinData Deserialize(XmlElement element)
 		{
+			if(string.IsNullOrEmpty( element.Name))
+				return null;
 			//string className = element.Name;
 			//Debug.Log("CREATE " + element.Name);
+
+			System.Type typeToCreate = Types.GetType(element.Name,"Assembly-CSharp");
+			if(typeToCreate==null)
+				return null;
+
 			MotinData instance = (MotinData)System.Activator.CreateInstance(Types.GetType(element.Name,"Assembly-CSharp"));
 			
 			DeserializeFields(element,instance);
@@ -325,9 +355,16 @@ namespace MotinGames
 			else if(field.FieldType.IsEnum )
 			{
 				string enumVal = GetString(element,prefName);
-				if(enumVal!=null && enumVal.Length>0)
+				if(!string.IsNullOrEmpty(enumVal))
 				{
-					field.SetValue(value,Enum.Parse(field.FieldType,enumVal));
+					try{
+							field.SetValue(value,Enum.Parse(field.FieldType,enumVal));
+					}
+					catch(Exception e)
+					{
+
+					}
+
 				}
 				//newValue =  EditorGUILayout.EnumPopup(field.Name,(System.Enum)System.Enum.ToObject(field.FieldType,oldValue));
 				//Debug.Log ("IS ENUM! " + field.Name);
@@ -632,7 +669,6 @@ namespace MotinGames
 		}
 		public static Vector3 GetVector3(XmlElement element, string name)
 		{
-			
 			Vector3 aux = Vector3.zero;
 			aux.x= GetFloat(element,"Vector3x_" + name);
 			aux.y= GetFloat(element,"Vector3y_" + name);
