@@ -107,8 +107,6 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		UpdateEditors();
 		
 		searchFilter = "";
-		OrderList();
-		
 		FilterList();
 
 		//if (selectedObjectIndex != -1 && selectedObjectIndex < objectList_.Count)
@@ -123,14 +121,14 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		
 		Repaint();
 	}
-	
+	/*
 	protected void UpdateSelectedObjectIndex()
 	{
 		if (selectedObject != null)
 		{
 			for (int i = 0; i < objectList.Count; ++i)
 			{
-				if (objectList[i] == selectedObject)
+				if (objectList[i] == selectedObUpject)
 				{
 					selectedObjectIndex = i;
 					break;
@@ -141,13 +139,16 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		{
 			selectedObjectIndex = -1;
 		}
-	}
+	}*/
 
 	protected object selectedObject
 	{
 		get { return _selectedObject; }
 		set 
 		{
+			_selectedObject = value;
+			UpdateSelectedIndex();
+			/*
 			selectedObjectIndex = -1;
 			if (value != null)
 			{
@@ -166,9 +167,30 @@ public class MotinArrayBaseEditor  : MotinEditor {
 				if (value != null) Debug.Log("Unable to find selected object");
 				_selectedObject = null;
 			}
+			*/
 		}
 	}
-	
+	protected void UpdateSelectedIndex()
+	{
+		selectedObjectIndex = -1;
+		if (_selectedObject != null)
+		{
+			for (int i = 0; i < filteredObjects.Count; ++i)
+			{
+				if (filteredObjects[i] == _selectedObject)
+				{
+					selectedObjectIndex = i;
+					break;
+				}
+			}
+		}
+
+		if(selectedObjectIndex ==-1)
+		{
+			_selectedObject = null;
+		}
+
+	}
 	public List<object> objectList
 	{
 		get{
@@ -390,7 +412,7 @@ public class MotinArrayBaseEditor  : MotinEditor {
 		cancelUpdate = true;
 		objectListUpdated();
 
-			RaiseOnEditorChanged();
+		RaiseOnEditorChanged();
 		//RaiseOnDataChanged();
 		
 

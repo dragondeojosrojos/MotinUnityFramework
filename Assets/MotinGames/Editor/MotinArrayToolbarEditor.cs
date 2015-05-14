@@ -17,8 +17,8 @@ namespace MotinGames
 		public int leftBarWidth { get { return leftBarWidth_; } set { leftBarWidth_ = Mathf.Max(value, minLeftBarWidth); } }
 		
 		
-		public bool orderDatas = true;
-		public bool overwriteFileOrder = false;
+		//public bool orderDatas = true;
+		//public bool overwriteFileOrder = false;
 		List<MotinData> motinDataList = new List<MotinData>();
 
 		string[] toolbarTexts = new string[0];
@@ -111,7 +111,7 @@ namespace MotinGames
 		
 		public static bool Contains(string s, string text) { return s.ToLower().IndexOf(text.ToLower()) != -1; }
 		
-
+		/*
 		public override void OrderList()
 		{
 			
@@ -138,7 +138,7 @@ namespace MotinGames
 					filteredObjects = (from data in motinDataList where  Contains(data.name, searchFilter)  select data).Cast<object>().ToList();
 			}
 		}
-		
+		*/
 		protected override void InitializeCreatedObject (object newObject)
 		{
 			base.InitializeCreatedObject (newObject);
@@ -360,7 +360,7 @@ namespace MotinGames
 		public void DataNameChanged(MotinEditor editor)
 		{
 			FilterList();
-			UpdateSelectedObjectIndex();
+			UpdateSelectedIndex();
 			Repaint();
 		}
 	}

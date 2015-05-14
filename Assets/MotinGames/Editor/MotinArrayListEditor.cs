@@ -19,7 +19,7 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 	
 	
 	public bool orderDatas = true;
-	public bool overwriteFileOrder = false;
+	public bool overwriteFileOrder = true;
 	List<MotinData> motinDataList = new List<MotinData>();
 	protected override void objectListUpdated ()
 	{
@@ -102,24 +102,37 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 		if(orderDatas)
 		{
 			motinDataList = (from data in motinDataList  orderby data.name select data).ToList();
-
+			motinEditors_ = (from meditor in motinEditors_  orderby ((MotinData)meditor.target).name select meditor).ToList();
+			
 			if (searchFilter.Length == 0)
+			{
 				filteredObjects = (from data in motinDataList  orderby data.name select data).Cast<object>().ToList();
+				filteredEditors_ = (from meditor in motinEditors_  orderby ((MotinData)meditor.target).name select meditor).ToList();
+			}
 			else
+			{
 				filteredObjects = (from data in motinDataList where  Contains(data.name, searchFilter) orderby data.name select data).Cast<object>().ToList();
+				filteredEditors_ = (from meditor in motinEditors_ where Contains(((MotinData)meditor.target).name,searchFilter)  orderby ((MotinData)meditor.target).name select meditor).ToList();
+			}
+		
 
 			if(overwriteFileOrder)
 			{
-				motinEditors_ = (from meditor in motinEditors_  orderby ((MotinData)meditor.target).name select meditor).ToList();
 				objectList_ = motinDataList.Cast<object>().ToList();
 			}
 		}
 		else
 		{
 			if (searchFilter.Length == 0)
+			{
 				filteredObjects = (from data in motinDataList   select data).Cast<object>().ToList();
+				filteredEditors_ = (from meditor in motinEditors_  select meditor).ToList();
+			}
 			else
+			{
 				filteredObjects = (from data in motinDataList where  Contains(data.name, searchFilter)  select data).Cast<object>().ToList();
+				filteredEditors_ = (from meditor in motinEditors_ where Contains(((MotinData)meditor.target).name,searchFilter) select meditor).ToList();
+			}
 		}
 	}
 	
@@ -152,82 +165,6 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 		FilterDatas();
 		RaiseOnDataChanged();
 		return data;
-	}
-	*/
-	/*
-	protected override void DrawToolbarButtons ()
-	{
-		// Create Button
-		
-		// LHS
-		GUILayout.BeginHorizontal(GUILayout.Width(leftBarWidth - 6));
-		
-		GUIContent createButton = new GUIContent("Create");
-		Rect createButtonRect = GUILayoutUtility.GetRect(createButton, EditorStyles.miniButton, GUILayout.ExpandWidth(false));
-		if (GUI.Button(createButtonRect, createButton, EditorStyles.miniButton) && motinDatas != null)
-		{
-			
-			selectedData = CreateNewData();
-			dataEditor.target = selectedData;		
-			Repaint();
-		}
-		
-		GUIContent duplicateButton = new GUIContent("Duplicate");
-		Rect duplicateButtonRect = GUILayoutUtility.GetRect(duplicateButton, EditorStyles.miniButton, GUILayout.ExpandWidth(false));
-		if (GUI.Button(duplicateButtonRect, duplicateButton, EditorStyles.miniButton) && motinDatas != null)
-		{
-			selectedData = DuplicateSelectedData();
-			dataEditor.target = selectedData;		
-			Repaint();
-		}
-		
-		
-		// Filter box
-		if (motinDatas != null)
-		{
-			GUILayout.Space(8);
-			string newSearchFilter = GUILayout.TextField(searchFilter, MotinEditorSkin.ToolbarSearch, GUILayout.ExpandWidth(true));
-			if (newSearchFilter != searchFilter)
-			{
-				searchFilter = newSearchFilter;
-				FilterDatas();
-			}
-			if (searchFilter.Length > 0)
-			{
-				if (GUILayout.Button("", MotinEditorSkin.ToolbarSearchClear, GUILayout.ExpandWidth(false)))
-				{
-					searchFilter = "";
-					FilterDatas();
-				}
-			}
-			else
-			{
-				GUILayout.Label("", MotinEditorSkin.ToolbarSearchRightCap);
-			}
-		}
-		
-		GUILayout.EndHorizontal();
-	}
-	
-	
-	*/
-	/*
-	void TrimClips()
-	{
-		if (motinDatas.Count < 1)
-			return;
-		
-		int validCount = motinDatas.Count;
-		while (validCount > 0 )
-			--validCount;
-		
-		motinDatas.RemoveRange(validCount, motinDatas.Count - validCount);
-		
-		if (motinDatas.Count == 0)
-		{
-			motinDatas.Add(CreateNewData());
-			FilterDatas();
-		}
 	}
 	*/
 
@@ -292,7 +229,7 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 		if(selectedObject!=null)
 		{ 
 				listScrollEditor = GUILayout.BeginScrollView(listScrollEditor,false,true,GUILayout.ExpandWidth(true) , GUILayout.ExpandHeight(true));
-				motinEditors_[selectedObjectIndex].Draw(new Rect(0,0,editorRect.width,motinEditors_[selectedObjectIndex].editorContentRect.height) ,false );
+				filteredEditors_[selectedObjectIndex].Draw(new Rect(0,0,editorRect.width,filteredEditors_[selectedObjectIndex].editorContentRect.height) ,false );
 				GUILayout.EndScrollView();
 			//DrawItem(selectedObjectIndex);
 			//			Debug.Log(" DRAW EDITOR " + selectedData.name);
@@ -311,7 +248,7 @@ public class MotinArrayListEditor  : MotinArrayBaseEditor {
 	public void DataNameChanged(MotinEditor editor)
 	{
 		FilterList();
-		UpdateSelectedObjectIndex();
+		UpdateSelectedIndex();
 		Repaint();
 	}
 }
